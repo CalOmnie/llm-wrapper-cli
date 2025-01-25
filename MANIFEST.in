@@ -3,6 +3,7 @@ include LICENSE
 include README.md
 
 recursive-include tests *
+recursive-include  src/llm_cli/prompts *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
 
