@@ -21,13 +21,17 @@ def run(args):
         token = os.getenv("HF_TOKEN")
     )
     msg = []
-    if args.query and args.prompt:
-        prompt = PROMPTS[args.prompt[0]]
+    query_lst = [*args.query, *args.extra]
+    if query_lst[0] in PROMPTS:
+        prompt = PROMPTS[args.query[0]]
         msg.append({"role": "system", "content": prompt})
+        query_lst = query_lst[1:]
 
-    query = args.query or args.prompt
+    query = " ".join(query_lst)
     if args.input:
-        query += args.input.read()
+        for f in args.input:
+            query += f"# {str(f.name)}\n"
+            query += f.read()
 
     msg.append({"role": "user", "content": query})
     res = model(msg)
@@ -36,10 +40,11 @@ def run(args):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-i", "--input", type=argparse.FileType("r"))
-    parser.add_argument("prompt", nargs=1, type=str)
-    parser.add_argument("query", nargs="?", type=str)
+    parser.add_argument("-i", "--input", type=argparse.FileType("r"), nargs="+")
+    parser.add_argument("-q", "--query", type=str, nargs="+")
+    parser.add_argument("extra", nargs="*", type=str)
     args = parser.parse_args()
+    print(args)
     run(args)
 
 
