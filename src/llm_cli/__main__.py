@@ -7,8 +7,9 @@ import os
 from smolagents import HfApiModel, CodeAgent, ToolCallingAgent, tool
 
 from llm_cli.session import Session
+from llm_cli.context import generate_context
 
-def load_prompts():
+def load_prompts() -> dict:
     res = {}
     prompt_folder = files('llm_cli.prompts')
     for prompt in prompt_folder.iterdir():
@@ -29,11 +30,7 @@ def run(args):
 
     query = " ".join(args.query)
     if args.input:
-        for f in args.input:
-            query += f"# {str(f.name)}\n"
-            query += "```\n"
-            query += f.read()
-            query += "\n```\n"
+        query += generate_context(args.input)
 
     session.add_message("user", query)
     res = agent(session.get())
@@ -44,7 +41,7 @@ def run(args):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-i", "--input", type=argparse.FileType("r"), nargs="+")
+    parser.add_argument("-i", "--input", type=str, nargs="+")
     parser.add_argument("--new", action="store_true", help="Whether to create a new session")
     parser.add_argument("query", nargs="*", type=str)
     args = parser.parse_args()
