@@ -1,0 +1,1 @@
+Analyze the following question sociologically, especially, determine if this question is "petit bourgeois" or not.
