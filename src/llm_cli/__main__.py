@@ -4,7 +4,9 @@ import time
 from importlib.resources import files
 import os
 
-from smolagents import HfApiModel
+from smolagents import HfApiModel, CodeAgent, ToolCallingAgent, tool
+
+from llm_cli.session import Session
 
 def load_prompts():
     res = {}
@@ -17,31 +19,35 @@ PROMPTS = load_prompts()
 
 def run(args):
     """Console script for llm_cli."""
-    model = HfApiModel(
-        token = os.getenv("HF_TOKEN")
+    agent = HfApiModel(
+        token = os.getenv("HF_TOKEN"),
     )
-    msg = []
+    session = Session(args.new)
     if args.query and args.query[0] in PROMPTS:
         prompt = PROMPTS[args.query[0]]
-        msg.append({"role": "system", "content": prompt})
+        session.add_message("system", prompt)
 
     query = " ".join(args.query)
     if args.input:
         for f in args.input:
             query += f"# {str(f.name)}\n"
+            query += "```\n"
             query += f.read()
+            query += "\n```\n"
 
-    msg.append({"role": "user", "content": query})
-    res = model(msg)
+    session.add_message("user", query)
+    res = agent(session.get())
+    session.add_message(res.role, res.content or "")
     print(res.content)
+    session.save()
     return 0
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--input", type=argparse.FileType("r"), nargs="+")
+    parser.add_argument("--new", action="store_true", help="Whether to create a new session")
     parser.add_argument("query", nargs="*", type=str)
     args = parser.parse_args()
-    print(args)
     run(args)
 
 
