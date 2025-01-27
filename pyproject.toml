@@ -18,7 +18,9 @@ classifiers = [
 ]
 license = {text = "MIT license"}
 dependencies = [
-  
+  "transformers",
+  "smolagents",
+  "markitdown"
 ]
 
 [project.optional-dependencies]
