@@ -23,7 +23,7 @@ def run(args):
     agent = HfApiModel(
         token = os.getenv("HF_TOKEN"),
     )
-    session = Session(args.new)
+    session = Session(args.cont)
     if args.query and args.query[0] in PROMPTS:
         prompt = PROMPTS[args.query[0]]
         session.add_message("system", prompt)
@@ -42,7 +42,7 @@ def run(args):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--input", type=str, nargs="+")
-    parser.add_argument("--new", action="store_true", help="Whether to create a new session")
+    parser.add_argument("-c", "--continue", dest="cont", action="store_true", help="Whether to use the response to continue the chat")
     parser.add_argument("query", nargs="*", type=str)
     args = parser.parse_args()
     run(args)
