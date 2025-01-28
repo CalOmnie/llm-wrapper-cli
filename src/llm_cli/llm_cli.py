@@ -1,4 +1,7 @@
 """Main module."""
+import argparse
+import os
 
-def main():
-    print("toto")
+
+def get_default(name: str) -> Any:
+    
