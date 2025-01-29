@@ -6,7 +6,7 @@ from markitdown import MarkItDown
 URL_REGEX = re.compile(r'^https?://[^\s]+$')
 MARKDOWN_SUFFIX = {"pdf"}
 
-def generate_context(inputs: list[str]) -> str:
+def read_inputs(inputs: list[str]) -> str:
     res = ""
     for inp in inputs:
         if URL_REGEX.match(inp):

@@ -9,14 +9,8 @@ from typing import Any
 from smolagents import HfApiModel, CodeAgent, ToolCallingAgent, tool
 
 from llm_cli.session import Session
-from llm_cli.context import generate_context
-
-def load_prompts() -> dict:
-    res = {}
-    prompt_folder = files('llm_cli.prompts')
-    for prompt in prompt_folder.iterdir():
-        res[prompt.stem] = prompt.read_text()
-    return res
+from llm_cli.inputs import read_inputs
+from llm_cli.prompts import load_prompts
 
 PROMPTS = load_prompts()
 
@@ -68,7 +62,7 @@ def run(args):
 
     query = " ".join(args.query)
     if args.input:
-        query += generate_context(args.input)
+        query += read_inputs(args.input)
 
     session.add_message("user", query)
     res = agent(session.get())
