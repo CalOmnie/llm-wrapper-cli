@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "llm_cli"
+name = "llm-wrapper-cli"
 version = "0.1.0"
 description = "Yet another LLM wrapper, this one used to access LLM output in CLI"
 readme = "README.md"
