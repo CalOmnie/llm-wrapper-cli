@@ -3,8 +3,8 @@ include LICENSE
 include README.md
 
 recursive-include tests *
-recursive-include  src/llm_cli/prompts *
+recursive-include  src/llm_cli/system_prompts *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
 
-recursive-include *.md conf.py Makefile
+recursive-include *.md Makefile
