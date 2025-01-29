@@ -72,7 +72,7 @@ jobs:
       with:
         repository-url: https://test.pypi.org/legacy/
 
- github-release:
+  github-release:
     name: >-
       Sign the Python 🐍 distribution 📦 with Sigstore
       and upload them to GitHub Release
