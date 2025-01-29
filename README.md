@@ -7,9 +7,17 @@ Yet another LLM wrapper, this one used to access LLM output in CLI
 
 # Quickstart
 
+## Create a HuggingFace token
+
+By default, `llmc` connects to huggingface's Inference API,
+this API usually requires a huggingface token to use. To create such a token,
+follow the instructions [here](https://huggingface.co/docs/api-inference/en/getting-started)
+
+## Installation
+
 ```bash
 pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ llm-wrapper-cli
-export HF_TOKEN=[...] # Optional
+export HF_TOKEN=[...] # Token generated in the above step
 llmc Tell me a joke
 ```
 
