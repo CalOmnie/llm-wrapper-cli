@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "llm_cli"
 version = "0.1.0"
 description = "Yet another LLM wrapper, this one used to access LLM output in CLI"
-readme = "README.rst"
+readme = "README.md"
 authors = [
   {name = "Louis Groux", email = "louis.cal.groux@gmail.com"}
 ]
@@ -33,7 +33,7 @@ dev = [
 
 [project.urls]
 bugs = "https://github.com/Calomnie/llm_cli/issues"
-changelog = "https://github.com/Calomnie/llm_cli/blob/master/changelog.md"
+changelog = "https://github.com/Calomnie/llm_cli/blob/master/CHANGELOG.md"
 homepage = "https://github.com/Calomnie/llm_cli"
 
 [project.scripts]
