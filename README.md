@@ -1,24 +1,70 @@
 # LLM Wrapper CLI
 
-Yet another LLM wrapper, this one used to access LLM output in CLI
+Yet another LLM wrapper, this one used to access LLM APIs in the CLI.
+The main goal of this project is to provide a faster answer to simple queries
+than current solutions. The main things this project aims to provide are:
+
+- A fast and easy way to send queries e.g. `llmc tell me a joke`
+- The possibility to provide complex prompts without having to type them every time (see Prompts section)
+- The ability to handle files and web pages: `llmc summarize in one line -i https://www.youtube.com/watch\?v\=BKorP55Aqvg`
 
 * Free software: MIT license
 * Documentation: https://llm-cli.readthedocs.io.
 
-# Quickstart
+# Prerequisites
 
-## Create a HuggingFace token
+This project sends its queries to a REST API, there are several options to gain
+access or host such an API, such as:
 
-By default, `llmc` connects to huggingface's Inference API,
+## Huggingface
+This is the default option due to it being very generous with its free API calls.
 this API usually requires a huggingface token to use. To create such a token,
-follow the instructions [here](https://huggingface.co/docs/api-inference/en/getting-started)
+follow the instructions [here](https://huggingface.co/docs/api-inference/en/getting-started).
+You can then export your token in your shell `export HF_TOKEN=[...]`
 
-## Installation
+## Self hosted with Ollama
+Arguably the easiest way to run self hosted LLMs, just run:
+```
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull llama3.1
+```
+Then configure `llmc` to use an openai API (which ollama implements) and you're good to go.
+
+# Quickstart
 
 ```bash
 pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ llm-wrapper-cli
 export HF_TOKEN=[...] # Token generated in the above step
 llmc Tell me a joke
+```
+
+# Connecting to OpenAI APIs
+
+To use `llmc` with OpenAI APIs (Chatgpt, Ollama, llama.cpp...), you need to fill in the `openai_*` parameters e.g.
+
+```
+$ ollama pull llama3.2
+$ llmc --provider openai --openai-url "http://localhost:11434/v1" --openai-model "llama3.2" "Tell me a joke"
+```
+
+# Configuration
+
+Every argument, besides `-i` and `-c` can be provided either through a configuration file located
+at `~/.llmc/conf.yml`, or an env file, which means that the previous example could also be configured like so:
+
+```
+$ cat ~/.llmc/conf.yml
+provider: openai
+openai_url: "http://localhost:11434/v1"
+openai_model: llama3.2
+$ llmc "Tell me a joke"
+```
+
+```
+$ export PROVIDER=openai
+$ export OPENAI_URL="http://localhost:11434/v1"
+$ export OPENAI_MODEL="llama3.2"
+$ llmc Tell me a joke
 ```
 
 # Features

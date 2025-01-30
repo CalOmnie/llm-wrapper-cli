@@ -6,7 +6,8 @@ import os
 from pathlib import Path
 from typing import Any
 
-from smolagents import HfApiModel, CodeAgent, ToolCallingAgent, tool
+import yaml
+from smolagents import HfApiModel, CodeAgent, OpenAIServerModel
 
 from llm_cli.session import Session
 from llm_cli.inputs import read_inputs
@@ -14,9 +15,9 @@ from llm_cli.prompts import load_prompts
 
 PROMPTS = load_prompts()
 
-USER_CONFIG_FOLDER_PATH = Path(os.path.expanduser("~")) / ".llmc" / "conf.yaml"
+USER_CONFIG_FOLDER_PATH = Path(os.path.expanduser("~")) / ".llmc" / "conf.yml"
 
-PROVIDERS = {"HuggingFace"}
+PROVIDERS = {"hf_api", "openai_api"}
 
 def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
@@ -24,10 +25,16 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument("-c", "--continue", dest="cont", action="store_true", help="Whether to use the response to continue the chat")
     parser.add_argument("query", nargs="*", type=str)
 
-    add_argument(parser, "provider", default_val="HuggingFace", choices=list(PROVIDERS), help="Which model provider to use.")
-    group = parser.add_argument_group('HuggingFace parameters')
+    add_argument(parser, "provider", default_val="huggingface", choices=list(PROVIDERS), help="Which model provider to use.")
+
+    group = parser.add_argument_group('HuggingFace API parameters')
     add_argument(group, "hf_token", help="Used to connect to huggingface api")
-    add_argument(group, "model_url", default_val="Qwen/Qwen2.5-Coder-32B-Instruct", help="Model URL, can also be a localhost URL for self hosted models")
+    add_argument(group, "hf_model_url", default_val="Qwen/Qwen2.5-Coder-32B-Instruct", help="Model URL, can also be a localhost URL for self hosted models")
+
+    group = parser.add_argument_group('OpenAI API parameters')
+    add_argument(group, "openai_url", help="Base URL to the OpenAI-compatible API")
+    add_argument(group, "openai_key", default_val="no-key", help="API key to provide the URL")
+    add_argument(group, "openai_model", help="Name of the model to use")
 
     return parser
 
@@ -48,13 +55,22 @@ def get_default(arg_name: str, default: Any) -> Any:
 
 def load_model(args: argparse.Namespace):
     match args.provider:
-        case "HuggingFace":
-            return load_hf_model(args.hf_token, args.model_url)
+        case "huggingface":
+            return load_hf_model(args.hf_token, args.hf_model_url)
+        case "openai":
+            return load_openai_model(args.openai_url, args.openai_key, args.openai_model)
         case _:
             raise ValueError(f"Invalid provider {args.provider}")
 
 def load_hf_model(hf_token: str, model_url: str) -> HfApiModel:
     return HfApiModel(model_url, token=hf_token)
+
+def load_openai_model(api_url: str, api_key: str, model: str) -> OpenAIServerModel:
+    return OpenAIServerModel(
+        model_id=model,
+        api_base=api_url,
+        api_key=api_key
+    )
 
 def run(args):
     """Console script for llm_cli."""
