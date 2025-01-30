@@ -8,9 +8,6 @@ than current solutions. The main things this project aims to provide are:
 - The possibility to provide complex prompts without having to type them every time (see Prompts section)
 - The ability to handle files and web pages: `llmc summarize in one line -i https://www.youtube.com/watch\?v\=BKorP55Aqvg`
 
-* Free software: MIT license
-* Documentation: https://llm-cli.readthedocs.io.
-
 # Prerequisites
 
 This project sends its queries to a REST API, there are several options to gain
