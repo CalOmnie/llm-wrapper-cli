@@ -25,8 +25,9 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument("query", nargs="*", type=str)
 
     add_argument(parser, "provider", default_val="HuggingFace", choices=list(PROVIDERS), help="Which model provider to use.")
-    add_argument(parser, "provider_token")
-    add_argument(parser, "model_name", default_val="Qwen/Qwen2.5-Coder-32B-Instruct")
+    group = parser.add_argument_group('HuggingFace parameters')
+    add_argument(group, "hf_token", help="Used to connect to huggingface api")
+    add_argument(group, "model_url", default_val="Qwen/Qwen2.5-Coder-32B-Instruct", help="Model URL, can also be a localhost URL for self hosted models")
 
     return parser
 
@@ -48,13 +49,16 @@ def get_default(arg_name: str, default: Any) -> Any:
 def load_model(args: argparse.Namespace):
     match args.provider:
         case "HuggingFace":
-            return load_hf_model(args)
+            return load_hf_model(args.hf_token, args.model_url)
+        case _:
+            raise ValueError(f"Invalid provider {args.provider}")
+
+def load_hf_model(hf_token: str, model_url: str) -> HfApiModel:
+    return HfApiModel(model_url, token=hf_token)
 
 def run(args):
     """Console script for llm_cli."""
-    agent = HfApiModel(
-        token = os.getenv("HF_TOKEN"),
-    )
+    agent = load_model(args)
     session = Session(args.cont)
     if args.query and args.query[0] in PROMPTS:
         prompt = PROMPTS[args.query[0]]
