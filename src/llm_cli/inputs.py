@@ -4,19 +4,34 @@ import re
 from markitdown import MarkItDown
 
 URL_REGEX = re.compile(r'^https?://[^\s]+$')
-MARKDOWN_SUFFIX = {"pdf"}
 
 def read_inputs(inputs: list[str]) -> str:
+    """Reads a list of inputs that can be URLs or file paths.
+
+    For URLs, it extracts markdown content.
+    For file paths, it reads the file and converts it to markdown if possible.
+    If the file cannot be converted to markdown, it reads the file content as text.
+
+    Args:
+        inputs (list[str]): A list of URLs or file paths.
+
+    Returns:
+        str: A concatenated string of markdown content extracted from inputs.
+
+    Raises:
+        ValueError: If an input is neither a valid URL nor a valid file path.
+    """
     res = ""
     for inp in inputs:
         if URL_REGEX.match(inp):
             res += extract_markdown(inp)
         elif not (path := Path(inp)).exists():
-            raise ValueErrror(f"Invalid input {inp}")
+            raise ValueError(f"Invalid input {inp}")
         else:
-            if should_markdown(path.suffix):
+            res += f"\n# {str(path)}"
+            try:
                 res += extract_markdown(path)
-            else:
+            except:
                 res += "\n```\n" + read_file(path) + "\n```\n"
     return res
 
@@ -28,6 +43,3 @@ def extract_markdown(target: str) -> str:
 def read_file(path: Path) -> str:
     with path.open("rt") as f:
         return f.read()
-
-def should_markdown(suffix: str) -> bool:
-    return suffix in MARKDOWN_SUFFIX

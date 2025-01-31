@@ -12,6 +12,7 @@ from smolagents import HfApiModel, CodeAgent, OpenAIServerModel
 from llm_cli.session import Session
 from llm_cli.inputs import read_inputs
 from llm_cli.prompts import load_prompts
+from llm_cli.client import load_client
 
 PROMPTS = load_prompts()
 
@@ -26,6 +27,8 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument("query", nargs="*", type=str)
 
     add_argument(parser, "provider", default_val="huggingface", choices=list(PROVIDERS), help="Which model provider to use.")
+    add_argument(parser, "agent", default_val=False, action="store_true", help="Whether to use a code agent")
+    add_argument(parser, "tee", default_val="", action="store_true", help="Whether to use a code agent")
 
     group = parser.add_argument_group('HuggingFace API parameters')
     add_argument(group, "hf_token", help="Used to connect to huggingface api")
@@ -53,42 +56,24 @@ def get_default(arg_name: str, default: Any) -> Any:
     env_val = os.getenv(arg_name.upper(), "")
     return env_val or file_val or default
 
-def load_model(args: argparse.Namespace):
-    match args.provider:
-        case "huggingface":
-            return load_hf_model(args.hf_token, args.hf_model_url)
-        case "openai":
-            return load_openai_model(args.openai_url, args.openai_key, args.openai_model)
-        case _:
-            raise ValueError(f"Invalid provider {args.provider}")
-
-def load_hf_model(hf_token: str, model_url: str) -> HfApiModel:
-    return HfApiModel(model_url, token=hf_token)
-
-def load_openai_model(api_url: str, api_key: str, model: str) -> OpenAIServerModel:
-    return OpenAIServerModel(
-        model_id=model,
-        api_base=api_url,
-        api_key=api_key
-    )
 
 def run(args):
     """Console script for llm_cli."""
-    agent = load_model(args)
-    session = Session(args.cont)
+    system_prompt = ""
     if args.query and args.query[0] in PROMPTS:
-        prompt = PROMPTS[args.query[0]]
-        session.add_message("system", prompt)
+        system_prompt = PROMPTS[args.query[0]]
+    client = load_client(args, system_prompt)
 
     query = " ".join(args.query)
     if args.input:
         query += read_inputs(args.input)
 
-    session.add_message("user", query)
-    res = agent(session.get())
-    session.add_message(res.role, res.content or "")
-    print(res.content)
-    session.save()
+    print(query)
+    res = client.send_query(query)
+    print(res)
+    if args.tee:
+        with open(args.tee, "wt") as f:
+            f.write(res)
     return 0
 
 
