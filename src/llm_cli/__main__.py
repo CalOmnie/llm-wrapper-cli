@@ -1,15 +1,11 @@
 import argparse
 import sys
-import time
-from importlib.resources import files
 import os
 from pathlib import Path
 from typing import Any
 
 import yaml
-from smolagents import HfApiModel, CodeAgent, OpenAIServerModel
 
-from llm_cli.session import Session
 from llm_cli.inputs import read_inputs
 from llm_cli.prompts import load_prompts
 from llm_cli.client import load_client

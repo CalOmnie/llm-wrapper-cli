@@ -1,6 +1,6 @@
 import pytest
-from unittest.mock import patch, mock_open, MagicMock
-from llm_cli.session import Session, SESSION_PATH
+from unittest.mock import patch, mock_open
+from llm_cli.session import Session
 import json
 import tempfile
 from pathlib import Path

@@ -1,6 +1,6 @@
 import pytest
-from unittest.mock import Mock, patch
-from llm_cli.inputs import read_inputs, extract_markdown, read_file, URL_REGEX
+from unittest.mock import patch
+from llm_cli.inputs import read_inputs, read_file
 
 def test_read_inputs_url():
     with patch('llm_cli.inputs.extract_markdown', return_value='Markdown content'):

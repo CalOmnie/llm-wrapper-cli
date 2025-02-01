@@ -1,6 +1,5 @@
 # tests/test_tools.py
-import pytest
-from unittest.mock import patch, mock_open, MagicMock
+from unittest.mock import patch, mock_open
 from llm_cli.tools import FileReaderTool, FileWriteTool
 
 def test_file_reader_tool():
