@@ -68,7 +68,6 @@ def run(args):
     if args.input:
         query += read_inputs(args.input)
 
-    print(query)
     res = client.send_query(query)
     print(res)
     if args.tee:
