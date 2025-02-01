@@ -22,13 +22,13 @@ def test_session_continue_chat_true():
         assert s.get() == mock_data
 
 def test_session_continue_chat_false():
-    with mock_session_file() as mock_file:
+    with mock_session_file():
         with patch('builtins.open', mock_open(read_data=json.dumps([]))):
             s = Session(continue_chat=False)
         assert s.get() == []
 
 def test_add_multiple_messages():
-    with mock_session_file() as mock_file:
+    with mock_session_file():
         s = Session(continue_chat=False)
         s.add_message("user", "first message")
         s.add_message("assistant", "second message")
@@ -58,25 +58,25 @@ def test_session_file_not_found():
         assert s.get() == []
 
 def test_get_session():
-    with mock_session_file() as mock_file:
+    with mock_session_file():
         s = Session(continue_chat=False)
         s.add_message("user", "test")
         assert s.get() == [{"role": "user", "content": "test"}]
 
 def test_session_file_empty():
-    with mock_session_file() as mock_file:
+    with mock_session_file():
         with pytest.raises(json.decoder.JSONDecodeError):
-            s = Session(continue_chat=True)
+            Session(continue_chat=True)
 
 def test_session_file_invalid_json():
     with mock_session_file() as mock_file:
         mock_file.write("invalid JSON")
         mock_file.seek(0)
         with pytest.raises(ValueError):
-            s = Session(continue_chat=True)
+            Session(continue_chat=True)
 
 def test_session_load_and_save():
-    with mock_session_file() as mock_file:
+    with mock_session_file():
         s1 = Session(continue_chat=False)
         s1.add_message("user", "test")
         s1.save()

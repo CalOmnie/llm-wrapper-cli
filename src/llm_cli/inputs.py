@@ -31,7 +31,7 @@ def read_inputs(inputs: list[str]) -> str:
             res += f"\n# {str(path)}"
             try:
                 res += extract_markdown(path)
-            except:
+            except Exception:
                 res += "\n```\n" + read_file(path) + "\n```\n"
     return res
 

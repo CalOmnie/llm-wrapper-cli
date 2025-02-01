@@ -23,7 +23,6 @@ def test_read_inputs_invalid_input():
     assert str(e.value) == 'Invalid input invalid_input'
 
 def test_read_file():
-    file_path = '/path/to/file.txt'
     with patch('llm_cli.inputs.Path') as MockPath:
         mock_path = MockPath.return_value
         mock_path.open.return_value.__enter__.return_value.read.return_value = 'File content'
