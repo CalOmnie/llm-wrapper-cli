@@ -1,6 +1,6 @@
 import pytest
-from unittest.mock import patch, MagicMock
-from llm_cli.prompts import load_prompts, USER_PROMPT_FOLDER
+from unittest.mock import MagicMock
+from llm_cli.prompts import load_prompts
 
 @pytest.fixture
 def mock_files(monkeypatch):
