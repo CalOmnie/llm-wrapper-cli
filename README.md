@@ -1,25 +1,29 @@
 # LLM Wrapper CLI
 
-The main goal of this project is to replace web queries,
-bypass sponsored content and irrelevant answers, and provide a quick way to
-upload multiple files and customize the system prompt.
+LLM Wrapper CLI is a powerful tool designed to simplify interactions with language models API like Hugging Face and OpenAI. Whether you need to execute code snippets, analyze documents, or generate content, LLM Wrapper CLI provides a seamless command-line interface. Key features include:
+- **Custom System Prompts**: Quickly configure language model outputs with custom prompts.
+- **File and URL Processing**: Process files and URLs to generate insightful outputs.
+- **Self-Hosting Support**: Easily connect to self-hosted language models using Ollama or similar services.
+- **Flexible Configuration**: Configure settings either through command-line arguments, configuration files, or environment variables.
 
+## Quick Examples
 
-Things like:
+Here are a few examples to give you a taste of what you can do with LLM Wrapper CLI:
 ```
+# Convert date string to datetime object
 $ llmc python convert "29 June, 1895" to datetime
 from datetime import datetime
 dt = datetime.strptime('29 June, 1895', '%d %B, %Y')
 
+# Grep for Python files in a directory hierarchy
 $ llmc bash grep only python files in folder hierarchy
 grep -r --include "*.py" "pattern" folder/
 
+# Explain the functionality of this package
 $ llmc explain what this package does in 2 sentences -i $(find src -name "*.py")
-This package provides a command-line interface for interacting with language
-models like Hugging Face and OpenAI, including features for managing chat sessions,
+This package provides a command-line interface for interacting with language models
+like Hugging Face and OpenAI. It supports managing chat sessions,
 loading custom prompts, and performing file operations via a code agent.
-It supports reading and writing files, and can process queries from the command line,
-URLs, or local files, converting them into markdown or plain text as needed.
 ```
 
 ## Features
