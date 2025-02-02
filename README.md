@@ -1,19 +1,18 @@
 # LLM Wrapper CLI
 
-Yet another LLM wrapper, this one used to access LLM APIs in the CLI.
-The main goal of this project is to provide a faster alternative to the browser queries done when programming.
+The main goal of this project is to replace web queries,
+bypass sponsored content and irrelevant answers, and provide a quick way to
+upload multiple files and customize the system prompt.
 Things like:
 ```
-$ llmc python pathlib create empty file
-from pathlib import Path
-Path('empty_file.txt').touch()
-
 $ llmc python convert "29 June, 1895" to datetime
 from datetime import datetime
 dt = datetime.strptime('29 June, 1895', '%d %B, %Y')
 
 $ llmc bash grep only python files in folder hierarchy
 grep -r --include "*.py" "pattern" folder/
+
+$ llmc python write tests for session.py -i $(find . -name "*.py") >> tests/test_session.py
 ```
 
 ## Features
