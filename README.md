@@ -15,10 +15,11 @@ $ llmc bash grep only python files in folder hierarchy
 grep -r --include "*.py" "pattern" folder/
 
 $ llmc explain what this package does in 2 lines -i $(find src -name "*.py")
-This package provides a command-line interface for interacting with language models like Hugging Face and OpenAI,
-including features for managing chat sessions, loading custom prompts, and performing file operations via a code agent.
-It supports reading and writing files, and can process queries from the command line, URLs, or local files,
-converting them into markdown or plain text as needed.
+This package provides a command-line interface for interacting with language
+models like Hugging Face and OpenAI, including features for managing chat sessions,
+loading custom prompts, and performing file operations via a code agent.
+It supports reading and writing files, and can process queries from the command line,
+URLs, or local files, converting them into markdown or plain text as needed.
 ```
 
 ## Features
