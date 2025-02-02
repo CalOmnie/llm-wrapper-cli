@@ -10,7 +10,7 @@ class Session:
     A class to manage chat sessions, load, add and save messages.
     """
 
-    def __init__(self, continue_chat: bool):
+    def __init__(self, continue_chat: bool, path: Path = SESSION_PATH):
         """
         Initializes a new session, loading an existing one if continue_chat is True.
         """
