@@ -1,13 +1,12 @@
-[![publishing](https://github.com/CalOmnie/llm_cli/actions/workflows/publish_to_pypi.yml/badge.svg)](https://github.com/CalOmnie/llm_cli/actions/workflows/publish_to_pypi.yml)
-[![Tests](https://github.com/CalOmnie/llm_cli/actions/workflows/test_python.yml/badge.svg)](https://github.com/CalOmnie/llm_cli/actions/workflows/test_python.yml)
+[![CI](https://github.com/CalOmnie/llm_cli/actions/workflows/test_python.yml/badge.svg)](https://github.com/CalOmnie/llm_cli/actions/workflows/test_python.yml)
 [![Coverage Status](https://coveralls.io/repos/github/CalOmnie/llm_cli/badge.svg?branch=main)](https://coveralls.io/github/CalOmnie/llm_cli?branch=main)
 # LLM Wrapper CLI
 
 LLM Wrapper CLI is a powerful tool designed to simplify interactions with language models API like Hugging Face and OpenAI. Whether you need to execute code snippets, analyze documents, or generate content, LLM Wrapper CLI provides a seamless command-line interface. Key features include:
-- **Custom System Prompts**: Quickly configure language model outputs with custom prompts.
-- **File and URL Processing**: Process files and URLs to generate insightful outputs.
-- **Self-Hosting Support**: Easily connect to self-hosted language models using Ollama or similar services.
-- **Flexible Configuration**: Configure settings either through command-line arguments, configuration files, or environment variables.
+- 📜 **Custom System Prompts**: Quickly configure language model outputs with custom prompts.
+- 🗃️  **File and URL Processing**: Process files and URLs to generate insightful outputs.
+- 🏠 **Self-Hosting Support**: Easily connect to self-hosted language models using Ollama or similar services.
+- ⚙️  **Flexible Configuration**: Configure settings either through command-line arguments, configuration files, or environment variables.
 
 ## Quick Examples
 
