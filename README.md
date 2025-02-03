@@ -1,5 +1,6 @@
-![publishing](https://github.com/github/docs/actions/workflows/publish_to_pypi.yml/badge.svg)
-![Tests](https://github.com/github/docs/actions/workflows/test_python.yml/badge.svg)
+![publishing](https://github.com/CalOmnie/llm_cli/actions/workflows/publish_to_pypi.yml/badge.svg)
+![Tests](https://github.com/CalOmnie/llm_cli/actions/workflows/test_python.yml/badge.svg)
+
 # LLM Wrapper CLI
 
 LLM Wrapper CLI is a powerful tool designed to simplify interactions with language models API like Hugging Face and OpenAI. Whether you need to execute code snippets, analyze documents, or generate content, LLM Wrapper CLI provides a seamless command-line interface. Key features include:
