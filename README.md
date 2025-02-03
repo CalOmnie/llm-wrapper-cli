@@ -1,5 +1,5 @@
-![publishing](https://github.com/CalOmnie/llm_cli/actions/workflows/publish_to_pypi.yml/badge.svg)
-![Tests](https://github.com/CalOmnie/llm_cli/actions/workflows/test_python.yml/badge.svg)
+[![publishing](https://github.com/CalOmnie/llm_cli/actions/workflows/publish_to_pypi.yml/badge.svg)](https://github.com/CalOmnie/llm_cli/actions/workflows/publish_to_pypi.yml)
+[![Tests](https://github.com/CalOmnie/llm_cli/actions/workflows/test_python.yml/badge.svg)][https://github.com/CalOmnie/llm_cli/actions/workflows/test_python.yml]
 
 # LLM Wrapper CLI
 
