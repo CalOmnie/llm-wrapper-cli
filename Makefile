@@ -30,7 +30,7 @@ lint/flake8: ## check style with flake8
 lint: lint/flake8 ## check style
 
 test: ## run tests quickly with the default Python
-	python setup.py test
+	pytest tests/
 
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source llm_cli setup.py test
