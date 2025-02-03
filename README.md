@@ -1,4 +1,4 @@
-[![CI](https://github.com/CalOmnie/llm_cli/actions/workflows/test_python.yml/badge.svg)](https://github.com/CalOmnie/llm_cli/actions/workflows/test_python.yml)
+[![CI](https://github.com/CalOmnie/llm_cli/actions/workflows/publish_to_pypi.yml/badge.svg)](https://github.com/CalOmnie/llm_cli/actions/workflows/publish_to_pypi.yml)
 [![Coverage Status](https://coveralls.io/repos/github/CalOmnie/llm_cli/badge.svg?branch=main)](https://coveralls.io/github/CalOmnie/llm_cli?branch=main)
 # LLM Wrapper CLI
 
