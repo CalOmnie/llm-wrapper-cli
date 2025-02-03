@@ -6,7 +6,7 @@ LLM Wrapper CLI is a powerful tool designed to simplify interactions with langua
 - 📜 **Custom System Prompts**: Quickly configure language model outputs with custom prompts.
 - 🌐 **File and URL Processing**: Process files and URLs to generate insightful outputs.
 - 🏠 **Self-Hosting Support**: Easily connect to self-hosted language models using Ollama or similar services.
-- ⚙️  *Flexible Configuration**: Configure settings either through command-line arguments, configuration files, or environment variables.
+- ⚙️ **Flexible Configuration**: Configure settings either through command-line arguments, configuration files, or environment variables.
 
 ## Quick Examples
 
