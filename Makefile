@@ -30,7 +30,7 @@ lint/flake8: ## check style with flake8
 lint: lint/flake8 ## check style
 
 test: ## run tests quickly with the default Python
-	pytest tests/
+	pytest --cov=llm_cli --cov-report term-missing:skip-covered --cov-report json tests/
 
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source llm_cli setup.py test

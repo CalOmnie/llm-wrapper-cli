@@ -20,15 +20,7 @@ jobs:
 
       - name: Test with pytest
         run: |
-          pytest --cov --cov-report json
-          # pytest --doctest-modules --junitxml=junit/test-results.xml
-      # - name: Upload pytest test results
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: pytest-results
-      #     path: junit/test-results.xml
-      #   # Use always() to always run this step to publish test results when there are test failures
-      #   if: ${{ always() }}
+          make test
 
       - name: Update Coverage Badge
         # GitHub actions: default branch variable
