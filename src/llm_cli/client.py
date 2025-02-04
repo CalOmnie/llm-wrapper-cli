@@ -56,7 +56,7 @@ class Agent(Model):
             model=base,
             add_base_tools=True,
             tools=[FileReaderTool(), FileWriteTool()],
-            additional_authorized_imports=["pathlib", "pytest", "unittest"],
+            additional_authorized_imports=["*"],
         )
 
     def system_promt(self, prompt: str):
