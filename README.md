@@ -81,7 +81,7 @@ This prompts and others are provided by default, you can find their definition i
 ### Providing files and URLs
 
 You can provide files or URLs using the `-i` option, those inputs are converted
-to markdown thanks to Microsoft's `markitdown` package, which handles a truly impressive amount of format.
+to markdown thanks to Microsoft's [markitdown](https://github.com/microsoft/markitdown) package, which handles a truly impressive amount of format.
 
 #### Examples
 Passing code files
