@@ -102,7 +102,8 @@ To pass all python files in the src folder: `llmc -i $(find src -name "*.py")`
 ##### Summarizing youtube videos
 ```
 $ llmc summarize in a few words -i https://www.youtube.com/watch\?v\=BKorP55Aqvg
-Short, humorous comedy sketch satirizing corporate meeting dynamics and an engineer's frustration with ambiguous instructions.
+Short, humorous comedy sketch satirizing corporate meeting dynamics and an engineer's
+frustration with ambiguous instructions.
 ```
 
 ## Credits
