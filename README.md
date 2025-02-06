@@ -54,7 +54,7 @@ openai_url: "http://localhost:11434/v1"
 openai_model: llama3.2 # Put your favourite model here
 ```
 
-You can find more ways to configure `llmc` in the [Configuration](FIXME) section.
+You can find more ways to configure `llmc` in the [Configuration](https://github.com/CalOmnie/llm_cli/blob/main/docs/configuration.md) section.
 
 ## Features
 
@@ -75,6 +75,8 @@ You: du -sh folder/*
 $ llmc bash ssh into a docker container
 docker exec -it container_id_or_name /bin/bash
 ```
+
+This prompts and others are provided by default, you can find their definition in the [Prompts](https://github.com/CalOmnie/llm_cli/blob/main/docs/prompts.md) section.
 
 ### Providing files and URLs
 
