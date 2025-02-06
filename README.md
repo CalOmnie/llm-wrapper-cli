@@ -84,7 +84,7 @@ You can provide files or URLs using the `-i` option, those inputs are converted
 to markdown thanks to Microsoft's [markitdown](https://github.com/microsoft/markitdown) package, which handles a truly impressive amount of format.
 
 #### Examples
-Passing code files
+##### Passing code files
 ```
 $ llmc python histogram of a list >> hist.py
 $ llmc python test histogram function -i hist.py
@@ -99,7 +99,7 @@ test_histogram()
 ```
 To pass all python files in the src folder: `llmc -i $(find src -name "*.py")`
 
-Summarizing youtube videos
+##### Summarizing youtube videos
 ```
 $ llmc summarize in a few words -i https://www.youtube.com/watch\?v\=BKorP55Aqvg
 Short, humorous comedy sketch satirizing corporate meeting dynamics and an engineer's frustration with ambiguous instructions.
