@@ -28,6 +28,34 @@ like Hugging Face and OpenAI. It supports managing chat sessions,
 loading custom prompts, and performing file operations via a code agent.
 ```
 
+## Installation
+
+```
+pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ llm-wrapper-cli
+```
+
+### Using HuggingFace API
+
+The fastest way to get started with `llmc` is with HuggingFace.
+Simply follow [these](https://huggingface.co/docs/api-inference/en/getting-started) instructions to create a token,
+then export it in your shell like so:
+```
+export HF_TOKEN=[...]
+```
+And you're ready to go
+
+### Using Ollama/OpenAI
+
+If you're already using Ollama, one way to configure `llmc` to use is by creating the following file:
+```
+$ cat ~/.llmc/conf.yml
+provider: openai
+openai_url: "http://localhost:11434/v1"
+openai_model: llama3.2 # Put your favourite model here
+```
+
+You can find more ways to configure `llmc` in the [Configuration](FIXME) section.
+
 ## Features
 
 ### Seamless system prompts
@@ -74,63 +102,6 @@ Summarizing youtube videos
 $ llmc summarize in a few words -i https://www.youtube.com/watch\?v\=BKorP55Aqvg
 Short, humorous comedy sketch satirizing corporate meeting dynamics and an engineer's frustration with ambiguous instructions.
 ```
-
-## Prerequisites
-
-This project sends its queries to a REST API, there are several options to gain
-access or host such an API, such as:
-
-### Huggingface
-This is the default option due to it being very generous with its free API calls.
-this API usually requires a huggingface token to use. To create such a token,
-follow the instructions [here](https://huggingface.co/docs/api-inference/en/getting-started).
-You can then export your token in your shell `export HF_TOKEN=[...]`
-
-### Self hosted with Ollama
-Arguably the easiest way to run self hosted LLMs, just run:
-```
-curl -fsSL https://ollama.com/install.sh | sh
-ollama pull llama3.1
-```
-Then configure `llmc` to use an openai API (which ollama implements) and you're good to go.
-
-## Quickstart
-
-```bash
-pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ llm-wrapper-cli
-export HF_TOKEN=[...] # Token generated in the above step
-llmc Tell me a joke
-```
-
-## Connecting to OpenAI APIs
-
-To use `llmc` with OpenAI APIs (Chatgpt, Ollama, llama.cpp...), you need to fill in the `openai_*` parameters e.g.
-
-```
-$ ollama pull llama3.2
-$ llmc --provider openai --openai-url "http://localhost:11434/v1" --openai-model "llama3.2" "Tell me a joke"
-```
-
-## Configuration
-
-Every argument, besides `-i` and `-c` can be provided either through a configuration file located
-at `~/.llmc/conf.yml`, or an env file, which means that the previous example could also be configured like so:
-
-```
-$ cat ~/.llmc/conf.yml
-provider: openai
-openai_url: "http://localhost:11434/v1"
-openai_model: llama3.2
-$ llmc "Tell me a joke"
-```
-
-```
-$ export PROVIDER=openai
-$ export OPENAI_URL="http://localhost:11434/v1"
-$ export OPENAI_MODEL="llama3.2"
-$ llmc Tell me a joke
-```
-
 
 ## Credits
 
