@@ -58,10 +58,9 @@ class Agent(Model):
             tools=[FileReaderTool(), FileWriteTool()],
             additional_authorized_imports=["*"],
         )
-
-    def system_promt(self, prompt: str):
-        self.system_prompt = prompt
+        self.system_prompt = system_prompt
 
     def send_query(self, query: str) -> str:
-        res = self.base.run(query)
+        full_query = f"{self.system_prompt}\n{query}"
+        res = self.base.run(full_query)
         return str(res)

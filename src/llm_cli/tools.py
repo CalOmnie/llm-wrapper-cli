@@ -37,7 +37,10 @@ class FileWriteTool(Tool):
 
     def forward(self, path: str, content: str) -> None:
         from pathlib import Path
-        user_val = input("Do you want to write this file? [y/n]")
+        print(content)
+        print(f"file path: {path}")
+        user_val = input("Do you want to write this file? 'y' for yes, "
+                         "anything else for no, anythig you typed is fed to the next step.")
         if user_val != "y":
             raise ValueError(f"User did not validate this change because of: {user_val}")
         p = Path(path)
