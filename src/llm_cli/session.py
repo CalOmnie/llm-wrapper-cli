@@ -15,6 +15,7 @@ class Session:
         Initializes a new session, loading an existing one if continue_chat is True.
         """
         self.session = []
+        self.session_path = path
         if continue_chat:
             self.load_session()
 
@@ -22,8 +23,8 @@ class Session:
         """
         Loads the session from a file if it exists.
         """
-        if (SESSION_PATH.exists() and SESSION_PATH.is_file()):
-            with SESSION_PATH.open("rt") as f:
+        if (self.session_path.exists() and self.session_path.is_file()):
+            with self.session_path.open("rt") as f:
                 self.session = json.load(f)
 
     def add_message(self, role: str, content: str):
@@ -42,5 +43,5 @@ class Session:
         """
         Saves the current session to a file.
         """
-        with SESSION_PATH.open("wt") as f:
+        with self.session_path.open("wt") as f:
             json.dump(self.session, f)
