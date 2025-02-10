@@ -24,7 +24,7 @@ def create_parser() -> argparse.ArgumentParser:
 
     add_argument(parser, "provider", default_val="huggingface", choices=list(PROVIDERS), help="Which model provider to use.")
     add_argument(parser, "agent", default_val=False, action="store_true", help="Whether to use a code agent")
-    add_argument(parser, "tee", default_val="", action="store_true", help="Whether to use a code agent")
+    add_argument(parser, "tee", default_val="", help="Which file to save to")
 
     group = parser.add_argument_group('HuggingFace API parameters')
     add_argument(group, "hf_token", help="Used to connect to huggingface api")
