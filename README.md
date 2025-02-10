@@ -66,7 +66,7 @@ and use the result to write further code. In the context of ths project, this ca
 - Do filesystem operations such as file moving/renaming/editing
 - Provide up to date information by querrying the web for information instead of its own memory.
 
-The agent function is activated by using the `--agent` option of `llmc`, example runs can be found in the [agents](https://github.com/CalOmnie/llm_cli/blob/main/docs/agents.md) section.
+The agent function is activated by using the `--agent` option of `llmc`, example runs can be found in the [agents](https://github.com/CalOmnie/llm_cli/blob/main/docs/agent.md) section.
 ### Seamless system prompts
 
 The first word of the query is used to check against the available prompts,
