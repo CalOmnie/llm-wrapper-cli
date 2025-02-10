@@ -31,7 +31,7 @@ loading custom prompts, and performing file operations via a code agent.
 ## Installation
 
 ```
-pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ llm-wrapper-cli
+pip install llm-wrapper-cli
 ```
 
 ### Using HuggingFace API
