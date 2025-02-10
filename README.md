@@ -58,6 +58,21 @@ You can find more ways to configure `llmc` in the [Configuration](https://github
 
 ## Features
 
+### Code agent
+
+This projects is based off of Huggingface's [smolagents](FIXME) package, this package allows for LLMs to write their own code, execute it,
+and use the result to write further code. In the context of ths project, this can be used for:
+- Write code/tests, and debug it on its own.
+- Do filesystem operations such as file moving/renaming/editing
+- Provide up to date information by querrying the web for information instead of its own memory.
+
+The agent function is activated by using the `--agent` option of `llmc`, for instance:
+
+```bash
+$ llmc --agent Write a function computing the histggram of a list as well as tests and writes it to hist.py
+[...]
+FIXME
+
 ### Seamless system prompts
 
 The first word of the query is used to check against the available prompts,
