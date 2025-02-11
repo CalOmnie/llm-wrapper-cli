@@ -70,8 +70,7 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         verbose: true
-        skip_existing: true
-        repository-url: https://pypi.org/legacy/
+        skip-existing: true
 
 
   publish-to-testpypi:
@@ -97,7 +96,7 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         verbose: true
-        skip_existing: true
+        skip-existing: true
         repository-url: https://test.pypi.org/legacy/
 
   github-release:
