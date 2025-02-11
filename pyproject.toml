@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "llm-wrapper-cli"
-version = "1.0.1"
-description = "Yet another LLM wrapper, this one used to access LLM output in CLI"
+version = "1.0.2"
+description = "Quick way to access LLM output in CLI and run Code Agents."
 readme = "README.md"
 authors = [
   {name = "Louis Groux", email = "louis.cal.groux@gmail.com"}
