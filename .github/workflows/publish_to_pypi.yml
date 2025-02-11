@@ -16,7 +16,7 @@ jobs:
           pip install ".[dev]"
       - name: Test with pytest
         run: |
-          coverage run --source=llm_cli -m pytest tests/
+          coverage run --source=llm_wrapper_cli -m pytest tests/
       - name: Coveralls
         uses: coverallsapp/github-action@v2
 

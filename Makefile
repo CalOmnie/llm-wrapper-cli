@@ -33,7 +33,7 @@ test: ## run tests quickly with the default Python
 	pytest --cov=llm_cli --cov-report term-missing:skip-covered tests/
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source llm_cli setup.py test
+	coverage run --source llm_wrapper_cli setup.py test
 	coverage report -m
 	coverage html
 	$(BROWSER) htmlcov/index.html
