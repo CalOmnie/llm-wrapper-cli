@@ -1,1 +1,1 @@
-"""Unit test package for llm_cli."""
+"""Unit test package for llm_wrapper_cli."""

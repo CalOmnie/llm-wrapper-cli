@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import Mock
 import argparse
 from smolagents import HfApiModel, OpenAIServerModel
-from llm_cli.client import load_openai_client, load_hf_client, load_client, ChatBot, Agent
+from llm_wrapper_cli.client import load_openai_client, load_hf_client, load_client, ChatBot, Agent
 
 @pytest.fixture
 def mock_args():

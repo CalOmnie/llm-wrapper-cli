@@ -1,5 +1,5 @@
-[![CI](https://github.com/CalOmnie/llm_cli/actions/workflows/publish_to_pypi.yml/badge.svg)](https://github.com/CalOmnie/llm_cli/actions/workflows/publish_to_pypi.yml)
-[![Coverage Status](https://coveralls.io/repos/github/CalOmnie/llm_cli/badge.svg?branch=main)](https://coveralls.io/github/CalOmnie/llm_cli?branch=main)
+[![Ci](https://github.com/CalOmnie/llm-wrapper-cli/actions/workflows/publish_to_pypi.yml/badge.svg)](https://github.com/CalOmnie/llm-wrapper-cli/actions/workflows/publish_to_pypi.yml)
+[![Coverage Status](https://coveralls.io/repos/github/CalOmnie/llm-wrapper-cli/badge.svg?branch=main)](https://coveralls.io/github/CalOmnie/llm-wrapper-cli?branch=main)
 
 # LLM Wrapper CLI
 LLM Wrapper CLI is a powerful tool designed to simplify interactions with language models API like Hugging Face and OpenAI. Whether you need to execute code snippets, analyze documents, or generate content, LLM Wrapper CLI provides a seamless command-line interface. Key features include:
@@ -54,7 +54,7 @@ openai_url: "http://localhost:11434/v1"
 openai_model: llama3.2 # Put your favourite model here
 ```
 
-You can find more ways to configure `llmc` in the [Configuration](https://github.com/CalOmnie/llm_cli/blob/main/docs/configuration.md) section.
+You can find more ways to configure `llmc` in the [Configuration](https://github.com/CalOmnie/llm-wrapper-cli/blob/main/docs/configuration.md) section.
 
 ## Features
 
@@ -66,7 +66,7 @@ and use the result to write further code. In the context of ths project, this ca
 - Do filesystem operations such as file moving/renaming/editing
 - Provide up to date information by querrying the web for information instead of its own memory.
 
-The agent function is activated by using the `--agent` option of `llmc`, example runs can be found in the [agents](https://github.com/CalOmnie/llm_cli/blob/main/docs/agent.md) section.
+The agent function is activated by using the `--agent` option of `llmc`, example runs can be found in the [agents](https://github.com/CalOmnie/llm-wrapper-cli/blob/main/docs/agent.md) section.
 ### Seamless system prompts
 
 The first word of the query is used to check against the available prompts,
@@ -85,7 +85,7 @@ $ llmc bash ssh into a docker container
 docker exec -it container_id_or_name /bin/bash
 ```
 
-This prompts and others are provided by default, you can find their definition in the [Prompts](https://github.com/CalOmnie/llm_cli/blob/main/docs/prompts.md) section.
+This prompts and others are provided by default, you can find their definition in the [Prompts](https://github.com/CalOmnie/llm-wrapper-cli/blob/main/docs/prompts.md) section.
 
 ### Providing files and URLs
 

@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 import argparse
 import os
 from pathlib import Path
-from llm_cli import __main__ as main_module
+from llm_wrapper_cli import __main__ as main_module
 import yaml
 
 class TestParser:
@@ -14,14 +14,14 @@ class TestParser:
     def test_conf_provider(self, tmp_path):
         conf_path = tmp_path / "conf.yml"
         self.write_conf_to_file(conf_path, {"provider": "openai"})
-        with patch("llm_cli.__main__.USER_CONFIG_FOLDER_PATH",conf_path):
+        with patch("llm_wrapper_cli.__main__.USER_CONFIG_FOLDER_PATH",conf_path):
             parser = main_module.create_parser()
             args = parser.parse_args([])
             assert args.provider == "openai"
 
     def test_default_provider(self, tmp_path):
         conf_path = tmp_path / "conf.yml"
-        with patch("llm_cli.__main__.USER_CONFIG_FOLDER_PATH", conf_path):
+        with patch("llm_wrapper_cli.__main__.USER_CONFIG_FOLDER_PATH", conf_path):
             parser = main_module.create_parser()
             args = parser.parse_args([])
             assert args.provider == "huggingface"
@@ -55,7 +55,7 @@ class TestParser:
 
     def test_cli_tee(self, tmp_path):
         conf_path = tmp_path / "conf.yml"
-        with patch("llm_cli.__main__.USER_CONFIG_FOLDER_PATH", conf_path):
+        with patch("llm_wrapper_cli.__main__.USER_CONFIG_FOLDER_PATH", conf_path):
             parser = main_module.create_parser()
             args = parser.parse_args("--tee a.out".split())
             assert args.tee == "a.out"
@@ -79,7 +79,7 @@ class TestParser:
         parser = main_module.create_parser()
         conf_path = tmp_path / "conf.yml"
         self.write_conf_to_file(conf_path, {"provider": "openai", "tee": True})
-        with patch("llm_cli.__main__.USER_CONFIG_FOLDER_PATH", conf_path):
+        with patch("llm_wrapper_cli.__main__.USER_CONFIG_FOLDER_PATH", conf_path):
             with patch.dict(os.environ, {"AGENT": "true"}):
                 args = parser.parse_args(["--provider", "openai_api", "--agent", "--tee", "foo", "bar", "-i", "input.txt", "-c"])
                 assert args.provider == "openai_api"

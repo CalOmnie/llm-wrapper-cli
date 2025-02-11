@@ -6,9 +6,9 @@ from typing import Any
 
 import yaml
 
-from llm_cli.inputs import read_inputs
-from llm_cli.prompts import load_prompts
-from llm_cli.client import load_client
+from llm_wrapper_cli.inputs import read_inputs
+from llm_wrapper_cli.prompts import load_prompts
+from llm_wrapper_cli.client import load_client
 
 PROMPTS = load_prompts()
 
@@ -54,7 +54,7 @@ def get_default(arg_name: str, default: Any) -> Any:
 
 
 def run(args):
-    """Console script for llm_cli."""
+    """Console script for llm_wrapper_cli."""
     system_prompt = ""
     if args.query and args.query[0] in PROMPTS:
         system_prompt = PROMPTS[args.query[0]]

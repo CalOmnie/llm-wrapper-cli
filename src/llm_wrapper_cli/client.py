@@ -3,8 +3,8 @@ import argparse
 import smolagents
 from smolagents import HfApiModel, OpenAIServerModel, CodeAgent
 
-from llm_cli.tools import FileReaderTool, FileWriteTool
-from llm_cli.session import Session
+from llm_wrapper_cli.tools import FileReaderTool, FileWriteTool
+from llm_wrapper_cli.session import Session
 
 def load_client(args: argparse.Namespace, system_prompt: str) -> "Model":
     base_model = None

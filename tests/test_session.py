@@ -1,5 +1,5 @@
 
-from llm_cli.session import Session
+from llm_wrapper_cli.session import Session
 import json
 
 def test_session_init_new(tmp_path):

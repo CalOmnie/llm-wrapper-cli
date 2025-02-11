@@ -1,6 +1,6 @@
 # tests/test_tools.py
 from unittest.mock import patch, mock_open
-from llm_cli.tools import FileReaderTool, FileWriteTool
+from llm_wrapper_cli.tools import FileReaderTool, FileWriteTool
 
 def test_file_reader_tool():
     m = mock_open(read_data="test content")

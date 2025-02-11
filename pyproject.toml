@@ -33,12 +33,12 @@ dev = [
 ]
 
 [project.urls]
-bugs = "https://github.com/Calomnie/llm_cli/issues"
-changelog = "https://github.com/Calomnie/llm_cli/blob/master/CHANGELOG.md"
-homepage = "https://github.com/Calomnie/llm_cli"
+bugs = "https://github.com/Calomnie/llm-wrapper-cli/issues"
+changelog = "https://github.com/Calomnie/llm-wrapper-cli/blob/master/CHANGELOG.md"
+homepage = "https://github.com/Calomnie/llm-wrapper-cli"
 
 [project.scripts]
-llmc = "llm_cli.__main__:main"
+llmc = "llm_wrapper_cli.__main__:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
