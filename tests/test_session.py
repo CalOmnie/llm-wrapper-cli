@@ -35,3 +35,21 @@ def test_session_save(tmp_path):
     session.save()
     saved_data = json.loads(session_path.read_text())
     assert saved_data == [{"role": "user", "content": "Hello"}]
+
+
+def test_session_load_empty_and_add_message(tmp_path):
+    session_path = tmp_path / 'test_session.json'
+    session_path.write_text('[]')
+    session = Session(continue_chat=True, path=session_path)
+    session.add_message('user', 'Hello')
+    assert session.session == [{'role': 'user', 'content': 'Hello'}]
+
+def test_session_load_add_and_save(tmp_path):
+    session_path = tmp_path / 'test_session.json'
+    test_session_data = [{'role': 'user', 'content': 'Hello'}, {'role': 'assistant', 'content': 'Hi'}]
+    session_path.write_text(json.dumps(test_session_data))
+    session = Session(continue_chat=True, path=session_path)
+    session.add_message('user', 'How are you?')
+    session.save()
+    saved_data = json.loads(session_path.read_text())
+    assert saved_data == [{'role': 'user', 'content': 'Hello'}, {'role': 'assistant', 'content': 'Hi'}, {'role': 'user', 'content': 'How are you?'}]

@@ -29,6 +29,7 @@ def create_parser() -> argparse.ArgumentParser:
     group = parser.add_argument_group('HuggingFace API parameters')
     add_argument(group, "hf_token", help="Used to connect to huggingface api")
     add_argument(group, "hf_model_url", default_val="Qwen/Qwen2.5-Coder-32B-Instruct", help="Model URL, can also be a localhost URL for self hosted models")
+    # add_argument(group, "hf_model_url", default_val="deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B", help="Model URL, can also be a localhost URL for self hosted models")
 
     group = parser.add_argument_group('OpenAI API parameters')
     add_argument(group, "openai_url", help="Base URL to the OpenAI-compatible API")
