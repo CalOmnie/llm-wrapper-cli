@@ -28,7 +28,7 @@ like Hugging Face and OpenAI. It supports managing chat sessions,
 loading custom prompts, and performing file operations via a code agent.
 ```
 
-You can find tips and tricks to make the most of `llmc` in the [Recipes](https://github.com/CalOmnie/llm-wrapper-cli/blob/main/docs/recipes.md)) section.
+You can find tips and tricks to make the most of `llmc` in the [Recipes](https://github.com/CalOmnie/llm-wrapper-cli/blob/main/docs/recipes.md) section.
 
 ## Installation
 
