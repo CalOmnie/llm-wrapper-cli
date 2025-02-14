@@ -28,6 +28,8 @@ like Hugging Face and OpenAI. It supports managing chat sessions,
 loading custom prompts, and performing file operations via a code agent.
 ```
 
+You can find tips and tricks to make the most of `llmc` in the [Recipes](https://github.com/CalOmnie/llm-wrapper-cli/blob/main/docs/recipes.md)) section.
+
 ## Installation
 
 ```
@@ -60,7 +62,7 @@ You can find more ways to configure `llmc` in the [Configuration](https://github
 
 ### Code agent
 
-This projects is based off of Huggingface's [smolagents](FIXME) package, this package allows for LLMs to write their own code, execute it,
+This projects is based off of Huggingface's [smolagents](https://github.com/huggingface/smolagents) package, this package allows for LLMs to write their own code, execute it,
 and use the result to write further code. In the context of ths project, this can be used for:
 - Write code/tests, and debug it on its own.
 - Do filesystem operations such as file moving/renaming/editing
