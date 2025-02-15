@@ -3,7 +3,7 @@ import argparse
 import smolagents
 from smolagents import HfApiModel, OpenAIServerModel, CodeAgent
 
-from llm_wrapper_cli.tools import FileReaderTool, FileWriteTool, RunTestFile, AddOneTest
+from llm_wrapper_cli.tools import FileReaderTool, FileWriteTool, RunTestFile, AddTest
 from llm_wrapper_cli.session import Session
 
 def load_client(args: argparse.Namespace, system_prompt: str) -> "Model":
@@ -55,7 +55,7 @@ class Agent(Model):
         self.base = CodeAgent(
             model=base,
             add_base_tools=True,
-            tools=[FileReaderTool(), FileWriteTool(), AddOneTest(), RunTestFile("pytest")],
+            tools=[FileReaderTool(), FileWriteTool(), AddTest("pytest")],
             additional_authorized_imports=["*"],
         )
         self.system_prompt = system_prompt

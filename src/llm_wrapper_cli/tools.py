@@ -51,8 +51,12 @@ class FileWriteTool(Tool):
 class AddTest(Tool):
     name = "add_test"
     description = """
-    This is a tool appending a test to a test file, running sais test,
+    This is a tool appending a test to a test file, running said test,
     and removing it from the file if it fails.
+    This tool does 3 things:
+        - Add the test function to the test file at position `path`
+        - Run the rest file, checking for results
+        - Revert the file to its original state if the test fails
     """
     inputs = {
         "path": {
@@ -61,7 +65,8 @@ class AddTest(Tool):
         },
         "test_function": {
             "type": "object",
-            "description": "The test function to add to the file."
+            "description": ("The test function to add to the file. "
+                            "This is the actual function object, **not** a string")
         }
     }
     output_type = "null"
@@ -71,42 +76,55 @@ class AddTest(Tool):
         super().__init__(*args, **kwargs)
 
     def forward(self, path: str, test_function: object):
-        fun_name = self.add_test(path, test_function)
-        output, returncode = self.run_test(path)
+        import ast
+        fun_def = self.__get_function_def(test_function)
+        path_ast = self.__parse_py_file(path)
+
+        # Add test
+        self.add_test(path_ast, fun_def)
+        output, returncode = self.run_test(path, path_ast)
         if returncode != 0:
-            self.delete_test(path, fun_name)
+            self.delete_test(path, path_ast)
         return output
 
-    def add_test(self, path: str, test_function: object) -> str:
-        import ast
-        fun_code, fun_name = "", ""
-        for param in test_function.__closure__:
-            content = param.cell_contents
-            if isinstance(content, ast.FunctionDef):
-                fun_code = ast.unparse(content)
-                fun_name = content.name
-        with open(path, "at") as f:
-            f.write("\n\n")
-            f.write(fun_code)
-        return fun_name
+    def add_test(self, path_ast, fun_def) -> None:
+        for member in path_ast.body:
+            if getattr(member, "name", "") == fun_def.name:
+                raise ValueError(f"A file already has a member called {fun_def.name}")
+        path_ast.body.append(fun_def)
 
-    def run_test(self, path: str):
+    def run_test(self, path: str, path_ast):
         import subprocess
+        import ast
+        with open(path, "wt") as f:
+            f.write(ast.unparse(path_ast))
+
         full_cmd = f"{self.run_cmd} {path}".split()
         res = subprocess.run(full_cmd, check=False, stdout=subprocess.PIPE)
         output = res.stdout.decode()
         returncode = res.returncode
         return output, returncode
 
-    def delete_test(self, path: str, fun_name: str):
+    def delete_test(self, path: str, path_ast):
         import ast
-        with open(path, "rt+") as f:
-            tree = ast.parse(f.read(), filename=path)
-            body = filter(lambda node: not (isinstance(node, ast.FunctionDef) and node.name == fun_name), tree.body)
-            tree.body = list(body)
-            f.seek(0)
-            f.write(ast.unparse(tree))
-            f.truncate()
+        with open(path, "wt") as f:
+            path_ast.body = list(path_ast.body)[:-1]
+            f.write(ast.unparse(path_ast))
+
+    def __get_function_def(self, function: object):
+        import ast
+        for param in function.__closure__:
+            content = param.cell_contents
+            if isinstance(content, ast.FunctionDef):
+                return content
+        raise ValueError("Could not find the function definition, "
+                         "was this tool called through `smolagents.local_python_intepreter`?")
+
+    def __parse_py_file(self, path: str):
+        import ast
+        with open(path, "rt") as f:
+            return ast.parse(f.read(), filename=path)
+
 
 class RunTestFile(Tool):
     name = "run_test_file"
