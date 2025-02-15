@@ -55,8 +55,8 @@ class AddTest(Tool):
     and removing it from the file if it fails.
     This tool does 3 things:
         - Add the test function to the test file at position `path`
-        - Run the rest file, checking for results
-        - Revert the file to its original state if the test fails
+        - Run the test function, checking for results
+        - Revert the file to its original state if the test function fails
     """
     inputs = {
         "path": {
@@ -82,7 +82,7 @@ class AddTest(Tool):
 
         # Add test
         self.add_test(path_ast, fun_def)
-        output, returncode = self.run_test(path, path_ast)
+        output, returncode = self.run_test(path, path_ast, fun_def)
         if returncode != 0:
             self.delete_test(path, path_ast)
         return output
@@ -93,13 +93,13 @@ class AddTest(Tool):
                 raise ValueError(f"A file already has a member called {fun_def.name}")
         path_ast.body.append(fun_def)
 
-    def run_test(self, path: str, path_ast):
+    def run_test(self, path: str, path_ast, fun_def):
         import subprocess
         import ast
         with open(path, "wt") as f:
             f.write(ast.unparse(path_ast))
 
-        full_cmd = f"{self.run_cmd} {path}".split()
+        full_cmd = f"{self.run_cmd} {path}::{fun_def.name}".split()
         res = subprocess.run(full_cmd, check=False, stdout=subprocess.PIPE)
         output = res.stdout.decode()
         returncode = res.returncode
