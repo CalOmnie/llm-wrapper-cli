@@ -6,6 +6,7 @@ from pathlib import Path
 from llm_wrapper_cli import __main__ as main_module
 import yaml
 
+
 class TestParser:
     def write_conf_to_file(self, conf_path: Path, conf: dict):
         with conf_path.open("wt") as f:
@@ -14,7 +15,7 @@ class TestParser:
     def test_conf_provider(self, tmp_path):
         conf_path = tmp_path / "conf.yml"
         self.write_conf_to_file(conf_path, {"provider": "openai"})
-        with patch("llm_wrapper_cli.__main__.USER_CONFIG_FOLDER_PATH",conf_path):
+        with patch("llm_wrapper_cli.__main__.USER_CONFIG_FOLDER_PATH", conf_path):
             parser = main_module.create_parser()
             args = parser.parse_args([])
             assert args.provider == "openai"
@@ -81,7 +82,19 @@ class TestParser:
         self.write_conf_to_file(conf_path, {"provider": "openai", "tee": True})
         with patch("llm_wrapper_cli.__main__.USER_CONFIG_FOLDER_PATH", conf_path):
             with patch.dict(os.environ, {"AGENT": "true"}):
-                args = parser.parse_args(["--provider", "openai_api", "--agent", "--tee", "foo", "bar", "-i", "input.txt", "-c"])
+                args = parser.parse_args(
+                    [
+                        "--provider",
+                        "openai_api",
+                        "--agent",
+                        "--tee",
+                        "foo",
+                        "bar",
+                        "-i",
+                        "input.txt",
+                        "-c",
+                    ]
+                )
                 assert args.provider == "openai_api"
                 assert args.agent
                 assert args.tee == "foo"
@@ -98,4 +111,3 @@ class TestParser:
         parser = main_module.create_parser()
         args = parser.parse_args(["-i", "input1.txt", "input2.txt"])
         assert args.input == ["input1.txt", "input2.txt"]
-

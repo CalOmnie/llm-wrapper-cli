@@ -3,8 +3,9 @@ import argparse
 import smolagents
 from smolagents import HfApiModel, OpenAIServerModel, CodeAgent
 
-from llm_wrapper_cli.tools import FileReaderTool, FileWriteTool, RunTestFile, AddTest
+from llm_wrapper_cli.tools import FileReaderTool, FileWriteTool, AddTest
 from llm_wrapper_cli.session import Session
+
 
 def load_client(args: argparse.Namespace, system_prompt: str) -> "Model":
     base_model = None
@@ -12,7 +13,9 @@ def load_client(args: argparse.Namespace, system_prompt: str) -> "Model":
         case "huggingface":
             base_model = load_hf_client(args.hf_token, args.hf_model_url)
         case "openai":
-            base_model = load_openai_client(args.openai_url, args.openai_key, args.openai_model)
+            base_model = load_openai_client(
+                args.openai_url, args.openai_key, args.openai_model
+            )
         case _:
             raise ValueError(f"Invalid provider {args.provider}")
 
@@ -21,23 +24,24 @@ def load_client(args: argparse.Namespace, system_prompt: str) -> "Model":
     else:
         return ChatBot(base_model, args.cont, system_prompt)
 
+
 def load_hf_client(hf_token: str, model_url: str) -> HfApiModel:
     return HfApiModel(model_url, token=hf_token)
 
+
 def load_openai_client(api_url: str, api_key: str, model: str) -> OpenAIServerModel:
-    return OpenAIServerModel(
-        model_id=model,
-        api_base=api_url,
-        api_key=api_key
-    )
+    return OpenAIServerModel(model_id=model, api_base=api_url, api_key=api_key)
 
 
 class Model:
     def send_query(self):
         raise NotImplementedError()
 
+
 class ChatBot(Model):
-    def __init__(self, base: smolagents.Model, continue_session: bool, system_prompt: str = ""):
+    def __init__(
+        self, base: smolagents.Model, continue_session: bool, system_prompt: str = ""
+    ):
         self.base = base
         self.session = Session(continue_session)
         if system_prompt:
@@ -49,6 +53,7 @@ class ChatBot(Model):
         self.session.add_message(res.role, res.content or "")
         self.session.save()
         return res.content
+
 
 class Agent(Model):
     def __init__(self, base: smolagents.Model, system_prompt: str = ""):

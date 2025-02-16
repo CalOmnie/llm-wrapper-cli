@@ -1,6 +1,7 @@
 from smolagents import Tool
 from typing import Callable
 
+
 class FileReaderTool(Tool):
     name = "read_file"
     description = """
@@ -18,6 +19,7 @@ class FileReaderTool(Tool):
         with open(path, "rt") as f:
             return f.read()
 
+
 class FileWriteTool(Tool):
     name = "write_file"
     description = """
@@ -28,21 +30,23 @@ class FileWriteTool(Tool):
             "type": "string",
             "description": "the path to the file",
         },
-        "content": {
-            "type": "string",
-            "description": "Content to write in the file"
-        }
+        "content": {"type": "string", "description": "Content to write in the file"},
     }
     output_type = "null"
 
     def forward(self, path: str, content: str) -> None:
         from pathlib import Path
+
         print(content)
         print(f"file path: {path}")
-        user_val = input("Do you want to write this file? 'y' for yes, "
-                         "anything else for no, anythig you typed is fed to the next step.")
+        user_val = input(
+            "Do you want to write this file? 'y' for yes, "
+            "anything else for no, anythig you typed is fed to the next step."
+        )
         if user_val != "y":
-            raise ValueError(f"User did not validate this change because of: {user_val}")
+            raise ValueError(
+                f"User did not validate this change because of: {user_val}"
+            )
         p = Path(path)
         with p.open("wt") as f:
             f.write(content)
@@ -65,9 +69,11 @@ class AddTest(Tool):
         },
         "test_function": {
             "type": "object",
-            "description": ("The test function to add to the file. "
-                            "This is the actual function object, **not** a string")
-        }
+            "description": (
+                "The test function to add to the file. "
+                "This is the actual function object, **not** a string"
+            ),
+        },
     }
     output_type = "null"
 
@@ -77,7 +83,8 @@ class AddTest(Tool):
 
     def forward(self, path: str, test_function: object):
         import ast
-        fun_def = self.__get_function_def(test_function)
+
+        fun_def = self._get_function_def(test_function)
         path_ast = self.__parse_py_file(path)
 
         # Add test
@@ -85,6 +92,7 @@ class AddTest(Tool):
         output, returncode = self.run_test(path, path_ast, fun_def)
         if returncode != 0:
             self.delete_test(path, path_ast)
+            raise ValueError(f"test failed with output {output}")
         return output
 
     def add_test(self, path_ast, fun_def) -> None:
@@ -96,6 +104,7 @@ class AddTest(Tool):
     def run_test(self, path: str, path_ast, fun_def):
         import subprocess
         import ast
+
         with open(path, "wt") as f:
             f.write(ast.unparse(path_ast))
 
@@ -107,44 +116,26 @@ class AddTest(Tool):
 
     def delete_test(self, path: str, path_ast):
         import ast
+
         with open(path, "wt") as f:
             path_ast.body = list(path_ast.body)[:-1]
             f.write(ast.unparse(path_ast))
 
-    def __get_function_def(self, function: object):
+    def _get_function_def(self, function: object):
         import ast
-        for param in function.__closure__:
-            content = param.cell_contents
-            if isinstance(content, ast.FunctionDef):
-                return content
-        raise ValueError("Could not find the function definition, "
-                         "was this tool called through `smolagents.local_python_intepreter`?")
+        import inspect
+        import textwrap
+
+        if getattr(function, "__closure__", None) is not None:
+            for param in function.__closure__:
+                content = param.cell_contents
+                if isinstance(content, ast.FunctionDef):
+                    return content
+        fun_source = textwrap.dedent(inspect.getsource(function))
+        return ast.parse(fun_source).body[0]
 
     def __parse_py_file(self, path: str):
         import ast
+
         with open(path, "rt") as f:
             return ast.parse(f.read(), filename=path)
-
-
-class RunTestFile(Tool):
-    name = "run_test_file"
-    description = """
-    This tool runs a test file and returns the test output.
-    """
-    inputs = {
-        "path": {
-            "type": "string",
-            "description": "Path to the test file."
-        }
-    }
-    output_type = "string"
-
-    def __init__(self, run_cmd: str, *args, **kwargs):
-        self.run_cmd = run_cmd
-        super().__init__(*args, **kwargs)
-
-    def forward(self, path: str) -> str:
-        import subprocess
-        full_cmd = f"{self.run_cmd} {path}".split()
-        res = subprocess.run(full_cmd, check=False, stdout=subprocess.PIPE).stdout.decode()
-        return res

@@ -2,7 +2,14 @@ import pytest
 from unittest.mock import Mock
 import argparse
 from smolagents import HfApiModel, OpenAIServerModel
-from llm_wrapper_cli.client import load_openai_client, load_hf_client, load_client, ChatBot, Agent
+from llm_wrapper_cli.client import (
+    load_openai_client,
+    load_hf_client,
+    load_client,
+    ChatBot,
+    Agent,
+)
+
 
 @pytest.fixture
 def mock_args():
@@ -17,20 +24,26 @@ def mock_args():
     args.cont = False
     return args
 
+
 def test_load_hf_client():
     client = load_hf_client("fake_token", "http://fakeurl")
     assert isinstance(client, HfApiModel)
     assert client.model_id == "http://fakeurl"
 
+
 def test_load_openai_client():
-    client = load_openai_client(api_url="http://apiurl", api_key="api_key", model="model")
+    client = load_openai_client(
+        api_url="http://apiurl", api_key="api_key", model="model"
+    )
     assert isinstance(client, OpenAIServerModel)
     assert client.model_id == "model"
+
 
 def test_load_client_hf(mock_args):
     mock_args.provider = "huggingface"
     model = load_client(mock_args, "system prompt")
     assert isinstance(model, ChatBot)
+
 
 def test_load_client_openai(mock_args):
     mock_args.provider = "openai"
@@ -38,10 +51,12 @@ def test_load_client_openai(mock_args):
     model = load_client(mock_args, "system prompt")
     assert isinstance(model, ChatBot)
 
+
 def test_load_client_agent(mock_args):
     mock_args.agent = True
     model = load_client(mock_args, "system prompt")
     assert isinstance(model, Agent)
+
 
 def test_chatbot_send_query():
     base_model = Mock()

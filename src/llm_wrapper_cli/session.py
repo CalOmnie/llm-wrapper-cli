@@ -1,9 +1,9 @@
-
 from pathlib import Path
 import tempfile
 import json
 
 SESSION_PATH = Path(tempfile.gettempdir()) / "llmc_session.json"
+
 
 class Session:
     """
@@ -23,7 +23,7 @@ class Session:
         """
         Loads the session from a file if it exists.
         """
-        if (self.session_path.exists() and self.session_path.is_file()):
+        if self.session_path.exists() and self.session_path.is_file():
             with self.session_path.open("rt") as f:
                 self.session = json.load(f)
 

@@ -3,7 +3,8 @@ import re
 
 from markitdown import MarkItDown
 
-URL_REGEX = re.compile(r'^https?://[^\s]+$')
+URL_REGEX = re.compile(r"^https?://[^\s]+$")
+
 
 def read_inputs(inputs: list[str]) -> str:
     """Reads a list of inputs that can be URLs or file paths.
@@ -35,10 +36,12 @@ def read_inputs(inputs: list[str]) -> str:
                 res += "\n```\n" + read_file(path) + "\n```\n"
     return res
 
+
 def extract_markdown(target: str) -> str:
     md = MarkItDown()
     result = md.convert(target)
     return result.text_content
+
 
 def read_file(path: Path) -> str:
     with path.open("rt") as f:
