@@ -129,7 +129,7 @@ def test_add_test_local_python_interpreter_valid(tmp_path):
     runner = LocalPythonInterpreter(
         tools={"add_test": AddTest("pytest")}, additional_authorized_imports=["*"]
     )
-    code = f'\ndef test_thingy():\n    print("testing")\n\nadd_test(path="{test_path}", test_function=test_thingy)\n'
+    code = f'def test_thingy():\n    print("testing")\n\nadd_test(path="{test_path}", test_function=test_thingy)'
     runner(code, {})
 
 
@@ -139,11 +139,6 @@ def test_add_test_local_python_interpreter_valid(tmp_path):
     runner = LocalPythonInterpreter(
         tools={"add_test": AddTest("pytest")}, additional_authorized_imports=["*"]
     )
-    code = f"""
-def test_thingy():
-    assert False
-
-add_test(path="{test_path}", test_function=test_thingy)
-"""
+    code = f'\ndef test_thingy():\n    assert False\n\nadd_test(path="{test_path}", test_function=test_thingy)\n'
     with pytest.raises(InterpreterError):
         runner(code, {})
