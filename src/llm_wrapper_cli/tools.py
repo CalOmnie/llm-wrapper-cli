@@ -88,25 +88,23 @@ class AddTest(Tool):
         path_ast = self.__parse_py_file(path)
 
         # Add test
-        self.add_test(path_ast, fun_def)
-        output, returncode = self.run_test(path, path_ast, fun_def)
+        self.add_test(path, path_ast, fun_def)
+        output, returncode = self.run_test(path, fun_def)
         if returncode != 0:
             self.delete_test(path, path_ast)
             raise ValueError(f"test failed with output {output}")
         return output
 
-    def add_test(self, path_ast, fun_def) -> None:
+    def add_test(self, path, path_ast, fun_def) -> None:
+        import ast
         for member in path_ast.body:
             if getattr(member, "name", "") == fun_def.name:
                 raise ValueError(f"A file already has a member called {fun_def.name}")
-        path_ast.body.append(fun_def)
+        with open(path, "at") as f:
+            f.write(f"\n{ast.unparse(fun_def)}\n")
 
-    def run_test(self, path: str, path_ast, fun_def):
+    def run_test(self, path, fun_def):
         import subprocess
-        import ast
-
-        with open(path, "wt") as f:
-            f.write(ast.unparse(path_ast))
 
         full_cmd = f"{self.run_cmd} {path}::{fun_def.name}".split()
         res = subprocess.run(full_cmd, check=False, stdout=subprocess.PIPE)
@@ -114,12 +112,23 @@ class AddTest(Tool):
         returncode = res.returncode
         return output, returncode
 
-    def delete_test(self, path: str, path_ast):
+    def delete_test(self, path: str, fun_def):
         import ast
+        print(f"FUN NAME {fun_def.name}")
 
-        with open(path, "wt") as f:
-            path_ast.body = list(path_ast.body)[:-1]
-            f.write(ast.unparse(path_ast))
+        with open(path, "rt+") as f:
+            pos = f.tell()
+            while line := f.readline():
+                if f"def {fun_def}" in line:
+                    print("FOUND THE LINE")
+                    print("FOUND THE LINE")
+                    print("FOUND THE LINE")
+                    print("FOUND THE LINE")
+                    print("FOUND THE LINE")
+                    f.seek(pos)
+                    f.truncate()
+                    break
+                pos = f.tell()
 
     def _get_function_def(self, function: object):
         import ast

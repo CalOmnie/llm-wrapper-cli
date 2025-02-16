@@ -142,3 +142,14 @@ def test_add_test_local_python_interpreter_valid(tmp_path):
     code = f'\ndef test_thingy():\n    assert False\n\nadd_test(path="{test_path}", test_function=test_thingy)\n'
     with pytest.raises(InterpreterError):
         runner(code, {})
+
+def test_add_test_with_empty_content(tmp_path, mock_add_test):
+    test_path = tmp_path / 'test_empty.py'
+    test_path.write_text('')
+
+    def test_empty():
+        assert True
+    mock_add_test.forward(test_path, test_empty)
+    with open(test_path, 'rt') as f:
+        content = f.read()
+        assert 'def test_empty():' in content, 'Test was not added to the empty file correctly'
