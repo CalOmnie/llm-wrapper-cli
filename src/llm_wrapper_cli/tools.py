@@ -91,7 +91,7 @@ class AddTest(Tool):
         self.add_test(path, path_ast, fun_def)
         output, returncode = self.run_test(path, fun_def)
         if returncode != 0:
-            self.delete_test(path, path_ast)
+            self.delete_test(path, fun_def)
             raise ValueError(f"test failed with output {output}")
         return output
 
@@ -114,17 +114,10 @@ class AddTest(Tool):
 
     def delete_test(self, path: str, fun_def):
         import ast
-        print(f"FUN NAME {fun_def.name}")
-
         with open(path, "rt+") as f:
             pos = f.tell()
             while line := f.readline():
-                if f"def {fun_def}" in line:
-                    print("FOUND THE LINE")
-                    print("FOUND THE LINE")
-                    print("FOUND THE LINE")
-                    print("FOUND THE LINE")
-                    print("FOUND THE LINE")
+                if f"def {fun_def.name}" in line:
                     f.seek(pos)
                     f.truncate()
                     break
