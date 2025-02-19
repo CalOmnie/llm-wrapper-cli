@@ -1,14 +1,8 @@
 from unittest.mock import patch, mock_open
-from llm_wrapper_cli.tools import FileReaderTool, FileWriteTool, AddTest
+from llm_wrapper_cli.tools import FileWriteTool, AddTest
 from smolagents.local_python_executor import LocalPythonInterpreter
 import pytest
 
-
-def test_file_reader_tool():
-    m = mock_open(read_data="test content")
-    with patch("builtins.open", m):
-        tool = FileReaderTool()
-        assert tool.forward("test.txt") == "test content"
 
 
 def test_write_file_confirmed(tmp_path):

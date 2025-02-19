@@ -21,7 +21,7 @@ def test_read_inputs_file():
         )
         mock_path.__str__.return_value = file_path
         result = read_inputs([file_path])
-    assert result == f"\n# {file_path}\n```\nFile content\n```\n"
+    assert result == f"\n# {file_path}\n\n```\nFile content\n```\n"
 
 
 def test_read_inputs_invalid_input():

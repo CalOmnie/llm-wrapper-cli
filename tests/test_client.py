@@ -22,6 +22,9 @@ def mock_args():
     args.openai_model = None
     args.agent = False
     args.cont = False
+    args.agent_test_cmd = "pytest"
+    args.agent_test_format = "{test_file}::{test_name}"
+    args.agent_coverage_regexp = ""
     return args
 
 
