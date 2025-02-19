@@ -29,7 +29,7 @@ def read_inputs(inputs: list[str]) -> str:
         elif not (path := Path(inp)).exists():
             raise ValueError(f"Invalid input {inp}")
         else:
-            res += f"\n# {str(path)}"
+            res += f"\n# {str(path)}\n"
             try:
                 res += extract_markdown(path)
             except Exception:

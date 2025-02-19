@@ -1,6 +1,4 @@
-import pytest
-from unittest.mock import patch, MagicMock
-import argparse
+from unittest.mock import patch
 import os
 from pathlib import Path
 from llm_wrapper_cli import __main__ as main_module

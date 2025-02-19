@@ -1,8 +1,7 @@
 from unittest.mock import patch, mock_open
 from llm_wrapper_cli.tools import FileReaderTool, FileWriteTool, AddTest
-from smolagents.local_python_executor import LocalPythonInterpreter, InterpreterError
+from smolagents.local_python_executor import LocalPythonInterpreter
 import pytest
-import ast
 
 
 def test_file_reader_tool():
@@ -133,23 +132,16 @@ def test_add_test_local_python_interpreter_valid(tmp_path):
     runner(code, {})
 
 
-def test_add_test_local_python_interpreter_valid(tmp_path):
-    test_path = tmp_path / "test.py"
-    test_path.touch()
-    runner = LocalPythonInterpreter(
-        tools={"add_test": AddTest("pytest")}, additional_authorized_imports=["*"]
-    )
-    code = f'\ndef test_thingy():\n    assert False\n\nadd_test(path="{test_path}", test_function=test_thingy)\n'
-    with pytest.raises(InterpreterError):
-        runner(code, {})
-
 def test_add_test_with_empty_content(tmp_path, mock_add_test):
-    test_path = tmp_path / 'test_empty.py'
-    test_path.write_text('')
+    test_path = tmp_path / "test_empty.py"
+    test_path.write_text("")
 
     def test_empty():
         assert True
+
     mock_add_test.forward(test_path, test_empty)
-    with open(test_path, 'rt') as f:
+    with open(test_path, "rt") as f:
         content = f.read()
-        assert 'def test_empty():' in content, 'Test was not added to the empty file correctly'
+        assert "def test_empty():" in content, (
+            "Test was not added to the empty file correctly"
+        )

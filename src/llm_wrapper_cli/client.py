@@ -3,7 +3,7 @@ import argparse
 import smolagents
 from smolagents import HfApiModel, OpenAIServerModel, CodeAgent
 
-from llm_wrapper_cli.tools import FileReaderTool, FileWriteTool, AddTest
+from llm_wrapper_cli.tools import FileWriteTool, AddTest
 from llm_wrapper_cli.session import Session
 
 
@@ -20,7 +20,7 @@ def load_client(args: argparse.Namespace, system_prompt: str) -> "Model":
             raise ValueError(f"Invalid provider {args.provider}")
 
     if args.agent:
-        return Agent(base_model, system_prompt)
+        return Agent(args, base_model, system_prompt)
     else:
         return ChatBot(base_model, args.cont, system_prompt)
 
@@ -56,11 +56,20 @@ class ChatBot(Model):
 
 
 class Agent(Model):
-    def __init__(self, base: smolagents.Model, system_prompt: str = ""):
+    def __init__(
+        self, args: argparse.Namespace, base: smolagents.Model, system_prompt: str = ""
+    ):
         self.base = CodeAgent(
             model=base,
             add_base_tools=True,
-            tools=[FileReaderTool(), FileWriteTool(), AddTest("pytest")],
+            tools=[
+                FileWriteTool(),
+                AddTest(
+                    run_cmd=args.agent_test_cmd,
+                    test_format_string=args.agent_test_format,
+                    coverage_regexp=args.agent_coverage_regexp,
+                ),
+            ],
             additional_authorized_imports=["*"],
         )
         self.system_prompt = system_prompt

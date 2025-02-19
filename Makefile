@@ -23,14 +23,14 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
-lint/flake8: ## check style with flake8
-	flake8 llm_cli tests
+lint:
+	ruff check
 
-
-lint: lint/flake8 ## check style
+format:
+	ruff format
 
 test: ## run tests quickly with the default Python
-	pytest --cov=llm_cli --cov-report term-missing:skip-covered tests/
+	pytest --cov=llm_wrapper_cli --cov-report term-missing:skip-covered tests/
 
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source llm_wrapper_cli setup.py test

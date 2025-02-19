@@ -9,6 +9,7 @@ import yaml
 from llm_wrapper_cli.inputs import read_inputs
 from llm_wrapper_cli.prompts import load_prompts
 from llm_wrapper_cli.client import load_client
+from llm_wrapper_cli.tools import TEST_RUN_CMD, TEST_FORMAT_STRING
 
 PROMPTS = load_prompts()
 
@@ -67,6 +68,25 @@ def create_parser() -> argparse.ArgumentParser:
         group, "openai_key", default_val="no-key", help="API key to provide the URL"
     )
     add_argument(group, "openai_model", help="Name of the model to use")
+
+    group = parser.add_argument_group("Code Agent parameters")
+    add_argument(
+        group,
+        "agent_test_cmd",
+        help="Command use by the agent to run tests e.g. `pytest`",
+        default_val=TEST_RUN_CMD,
+    )
+    add_argument(
+        group,
+        "agent_test_format",
+        help="Format string used by the agent to run specific function in the test file e.g. '{test_path}::{test_name}'",
+        default_val=TEST_FORMAT_STRING,
+    )
+    add_argument(
+        group,
+        "agent_coverage_regexp",
+        help="If set, checks whether the generated test increases coverage before adding",
+    )
 
     return parser
 

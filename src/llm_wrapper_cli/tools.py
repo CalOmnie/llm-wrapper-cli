@@ -1,23 +1,7 @@
 from smolagents import Tool
-from typing import Callable
 
-
-class FileReaderTool(Tool):
-    name = "read_file"
-    description = """
-    This is a tool reading a file passed as argument, it returns the content of the file
-    """
-    inputs = {
-        "path": {
-            "type": "string",
-            "description": "the path to the file",
-        }
-    }
-    output_type = "string"
-
-    def forward(self, path: str):
-        with open(path, "rt") as f:
-            return f.read()
+TEST_RUN_CMD = "pytest"
+TEST_FORMAT_STRING = "{test_file}::{test_name}"
 
 
 class FileWriteTool(Tool):
@@ -77,12 +61,19 @@ class AddTest(Tool):
     }
     output_type = "null"
 
-    def __init__(self, run_cmd: str, *args, **kwargs):
+    def __init__(
+        self,
+        *args,
+        run_cmd: str = TEST_RUN_CMD,
+        test_format_string=TEST_FORMAT_STRING,
+        coverage_regexp="",
+    ):
         self.run_cmd = run_cmd
-        super().__init__(*args, **kwargs)
+        self.test_format_string = test_format_string
+        self.coverage_regexp = coverage_regexp
+        super().__init__()
 
     def forward(self, path: str, test_function: object):
-        import ast
 
         fun_def = self._get_function_def(test_function)
         path_ast = self.__parse_py_file(path)
@@ -97,6 +88,7 @@ class AddTest(Tool):
 
     def add_test(self, path, path_ast, fun_def) -> None:
         import ast
+
         for member in path_ast.body:
             if getattr(member, "name", "") == fun_def.name:
                 raise ValueError(f"A file already has a member called {fun_def.name}")
@@ -106,14 +98,17 @@ class AddTest(Tool):
     def run_test(self, path, fun_def):
         import subprocess
 
-        full_cmd = f"{self.run_cmd} {path}::{fun_def.name}".split()
+        test_str = self.test_format_string.format(
+            test_file=path, test_name=fun_def.name
+        )
+        full_cmd = f"{self.run_cmd} {test_str}".split()
         res = subprocess.run(full_cmd, check=False, stdout=subprocess.PIPE)
         output = res.stdout.decode()
         returncode = res.returncode
         return output, returncode
 
     def delete_test(self, path: str, fun_def):
-        import ast
+
         with open(path, "rt+") as f:
             pos = f.tell()
             while line := f.readline():
