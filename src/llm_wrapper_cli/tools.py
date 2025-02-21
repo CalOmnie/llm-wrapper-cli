@@ -78,12 +78,34 @@ class AddTest(Tool):
         fun_def = self._get_function_def(test_function)
         path_ast = self.__parse_py_file(path)
 
+        if self.coverage_regexp:
+            self.add_with_coverage(path, path_ast, fun_def)
+
         # Add test
         self.add_test(path, path_ast, fun_def)
         output, returncode = self.run_test(path, fun_def)
         if returncode != 0:
             self.delete_test(path, fun_def)
             raise ValueError(f"test failed with output {output}")
+        return output
+
+    def add_with_coverage(self, path, path_ast, fun_def):
+        output, returncode = self.run_test(path, fun_def)
+        # Return code 5 is when no test ran
+        if returncode != 0 and returncode != 5:
+            raise ValueError("Test file does not pass before adding the tests")
+
+        base_coverage = float(re.search(self.coverage_regexp, output).group(1))
+        # Add test
+        self.add_test(path, path_ast, fun_def)
+        output, returncode = self.run_test(path, fun_def)
+        if returncode != 0:
+            self.delete_test(path, fun_def)
+            raise ValueError(f"test failed with output {output}")
+        new_coverage = float(re.search(self.coverage_regexp, output).group(1))
+        if new_coverage <= base_coverage:
+            self.delete_test(path, fun_def)
+            raise ValueError(f"Test did not increase coverage")
         return output
 
     def add_test(self, path, path_ast, fun_def) -> None:
