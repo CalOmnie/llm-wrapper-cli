@@ -43,12 +43,6 @@ llmc = "llm_wrapper_cli.__main__:main"
 [tool.setuptools]
 package-dir = {"" = "src"}
 
-# [tool.setuptools.package-data]
-# "*" = ["*.*"]
-
-
-
-
 # Mypy
 # ----
 
