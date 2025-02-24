@@ -1,52 +1,7 @@
 from unittest.mock import patch
-from llm_wrapper_cli.tools import FileWriteTool, AddTest
+from llm_wrapper_cli.tools import AddTest
 from smolagents.local_python_executor import LocalPythonInterpreter
 import pytest
-
-
-def test_write_file_confirmed(tmp_path):
-    path = tmp_path / "testfile.txt"
-    content = "Hello, world!"
-    tool = FileWriteTool()
-    with patch("builtins.input", return_value="y"):
-        tool.forward(str(path), content)
-    assert path.read_text() == content
-
-
-def test_write_file_rejected(tmp_path):
-    path = tmp_path / "testfile.txt"
-    content = "Hello, world!"
-    tool = FileWriteTool()
-    with patch("builtins.input", return_value="n"):
-        try:
-            tool.forward(str(path), content)
-        except ValueError as e:
-            assert str(e) == "User did not validate this change because of: n"
-    assert not path.exists()
-
-
-def test_write_file_existing_confirmed(tmp_path):
-    path = tmp_path / "testfile.txt"
-    path.write_text("Initial content")
-    content = "Hello, world!"
-    tool = FileWriteTool()
-    with patch("builtins.input", return_value="y"):
-        tool.forward(str(path), content)
-    assert path.read_text() == content
-
-
-def test_write_file_existing_rejected(tmp_path):
-    path = tmp_path / "testfile.txt"
-    path.write_text("Initial content")
-    content = "Hello, world!"
-    tool = FileWriteTool()
-    with patch("builtins.input", return_value="n"):
-        try:
-            tool.forward(str(path), content)
-        except ValueError as e:
-            assert str(e) == "User did not validate this change because of: n"
-    assert path.read_text() == "Initial content"
-
 
 @pytest.fixture
 def mock_add_test():

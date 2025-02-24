@@ -3,7 +3,7 @@ import argparse
 import smolagents
 from smolagents import HfApiModel, OpenAIServerModel, CodeAgent
 
-from llm_wrapper_cli.tools import FileWriteTool, AddTest
+from llm_wrapper_cli.tools import AddTest
 from llm_wrapper_cli.session import Session
 
 
@@ -63,7 +63,6 @@ class Agent(Model):
             model=base,
             add_base_tools=True,
             tools=[
-                FileWriteTool(),
                 AddTest(
                     run_cmd=args.agent_test_cmd,
                     test_format_string=args.agent_test_format,
