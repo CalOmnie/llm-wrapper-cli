@@ -4,6 +4,7 @@ include README.md
 
 recursive-include tests *
 recursive-include  src/llm_wrapper_cli/system_prompts *
+recursive-include  src/llm_wrapper_cli/agent_templates *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
 
