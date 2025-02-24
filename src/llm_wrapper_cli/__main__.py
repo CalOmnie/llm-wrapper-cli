@@ -7,11 +7,12 @@ from typing import Any
 import yaml
 
 from llm_wrapper_cli.inputs import read_inputs
-from llm_wrapper_cli.prompts import load_prompts
+from llm_wrapper_cli.prompts import load_prompts, load_agent_templates
 from llm_wrapper_cli.client import load_client
 from llm_wrapper_cli.tools import TEST_RUN_CMD, TEST_FORMAT_STRING
 
 PROMPTS = load_prompts()
+AGENT_TEMPLATES = load_agent_templates()
 
 USER_CONFIG_FOLDER_PATH = Path(os.path.expanduser("~")) / ".llmc" / "conf.yml"
 
@@ -111,8 +112,12 @@ def get_default(arg_name: str, default: Any) -> Any:
 def run(args):
     """Console script for llm_wrapper_cli."""
     system_prompt = ""
+    if args.agent and args.query and args.query[0] in AGENT_TEMPLATES:
+        system_prompt = AGENT_TEMPLATES[args.query[0]]
+        args.query = args.query[1:]
     if args.query and args.query[0] in PROMPTS:
         system_prompt = PROMPTS[args.query[0]]
+        args.query = args.query[1:]
     client = load_client(args, system_prompt)
 
     query = " ".join(args.query)

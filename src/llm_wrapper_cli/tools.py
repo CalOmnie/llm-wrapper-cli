@@ -26,7 +26,7 @@ class AddTest(Tool):
             ),
         },
     }
-    output_type = "null"
+    output_type = "string"
 
     def __init__(
         self,
@@ -41,19 +41,21 @@ class AddTest(Tool):
         super().__init__()
 
     def forward(self, path: str, test_function: object):
+        from pathlib import Path
+        path = Path(path)
         fun_def = self._get_function_def(test_function)
         path_ast = self.__parse_py_file(path)
 
         if self.coverage_regexp:
-            return self.add_with_coverage(path, path_ast, fun_def)
+            output = self.add_with_coverage(path, path_ast, fun_def)
         else:
             # Add test
             self.add_test(path, path_ast, fun_def)
             output, returncode = self.run_test(path, fun_def)
             if returncode != 0:
                 self.delete_test(path, fun_def)
-                raise ValueError(f"test failed with output {output}")
-            return output
+                raise ValueError(f"test failed with output:\n{output}")
+        return self._generate_output(output, fun_def)
 
     def add_with_coverage(self, path, path_ast, fun_def):
         import re
@@ -62,7 +64,7 @@ class AddTest(Tool):
         # Return code 5 is when no test ran
         if returncode != 0 and returncode != 5:
             raise ValueError(
-                f"Test file does not pass before adding the tests, returncode {returncode}:\n{output}"
+                f"Test file does not pass before adding the tests, returncode:\n{output}"
             )
 
         base_coverage = float(
@@ -104,7 +106,7 @@ class AddTest(Tool):
         return output, returncode
 
     def delete_test(self, path: str, fun_def):
-        with open(path, "rt+") as f:
+        with path.open("rt+") as f:
             pos = f.tell()
             while line := f.readline():
                 if f"def {fun_def.name}" in line:
@@ -126,8 +128,13 @@ class AddTest(Tool):
         fun_source = textwrap.dedent(inspect.getsource(function))
         return ast.parse(fun_source).body[0]
 
+    def _generate_output(self, output, fun_def):
+        import ast
+        return (f"Test added succesfully.\n"
+               f"# Test run Output\n{output}\n"
+               f"# Test function\n{ast.unparse(fun_def)}")
+
     def __parse_py_file(self, path: str):
         import ast
 
-        with open(path, "rt") as f:
-            return ast.parse(f.read(), filename=path)
+        return ast.parse(path.read_text(), filename=path)

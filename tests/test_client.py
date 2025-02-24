@@ -57,7 +57,7 @@ def test_load_client_openai(mock_args):
 
 def test_load_client_agent(mock_args):
     mock_args.agent = True
-    model = load_client(mock_args, "system prompt")
+    model = load_client(mock_args, None)
     assert isinstance(model, Agent)
 
 

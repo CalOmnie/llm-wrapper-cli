@@ -1,4 +1,5 @@
 import argparse
+from typing import Optional
 
 import smolagents
 from smolagents import HfApiModel, OpenAIServerModel, CodeAgent
@@ -57,11 +58,10 @@ class ChatBot(Model):
 
 class Agent(Model):
     def __init__(
-        self, args: argparse.Namespace, base: smolagents.Model, system_prompt: str = ""
+        self, args: argparse.Namespace, base: smolagents.Model, agent_template: Optional[dict] = None
     ):
         self.base = CodeAgent(
             model=base,
-            add_base_tools=True,
             tools=[
                 AddTest(
                     run_cmd=args.agent_test_cmd,
@@ -69,11 +69,10 @@ class Agent(Model):
                     coverage_regexp=args.agent_coverage_regexp,
                 ),
             ],
+            prompt_templates = agent_template,
             additional_authorized_imports=["*"],
         )
-        self.system_prompt = system_prompt
 
     def send_query(self, query: str) -> str:
-        full_query = f"{self.system_prompt}\n{query}"
-        res = self.base.run(full_query)
+        res = self.base.run(query)
         return str(res)
