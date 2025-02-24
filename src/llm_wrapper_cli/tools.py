@@ -74,7 +74,6 @@ class AddTest(Tool):
         super().__init__()
 
     def forward(self, path: str, test_function: object):
-
         fun_def = self._get_function_def(test_function)
         path_ast = self.__parse_py_file(path)
 
@@ -91,19 +90,26 @@ class AddTest(Tool):
 
     def add_with_coverage(self, path, path_ast, fun_def):
         import re
+
         output, returncode = self.run_test(path, fun_def)
         # Return code 5 is when no test ran
         if returncode != 0 and returncode != 5:
-            raise ValueError(f"Test file does not pass before adding the tests, returncode {returncode}:\n{output}")
+            raise ValueError(
+                f"Test file does not pass before adding the tests, returncode {returncode}:\n{output}"
+            )
 
-        base_coverage = float(re.search(self.coverage_regexp, output, re.MULTILINE).group(1))
+        base_coverage = float(
+            re.search(self.coverage_regexp, output, re.MULTILINE).group(1)
+        )
         # Add test
         self.add_test(path, path_ast, fun_def)
         output, returncode = self.run_test(path, fun_def)
         if returncode != 0:
             self.delete_test(path, fun_def)
-            raise ValueError(f"test failed with output:\n{output}")
-        new_coverage = float(re.search(self.coverage_regexp, output, re.MULTILINE).group(1))
+            raise ValueError(f"Test failed with output:\n{output}")
+        new_coverage = float(
+            re.search(self.coverage_regexp, output, re.MULTILINE).group(1)
+        )
         if new_coverage <= base_coverage:
             self.delete_test(path, fun_def)
             raise ValueError(f"Test did not increase coverage, full output:\n{output}")
@@ -132,7 +138,6 @@ class AddTest(Tool):
         return output, returncode
 
     def delete_test(self, path: str, fun_def):
-
         with open(path, "rt+") as f:
             pos = f.tell()
             while line := f.readline():

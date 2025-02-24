@@ -1,8 +1,7 @@
-from unittest.mock import patch, mock_open
+from unittest.mock import patch
 from llm_wrapper_cli.tools import FileWriteTool, AddTest
 from smolagents.local_python_executor import LocalPythonInterpreter
 import pytest
-
 
 
 def test_write_file_confirmed(tmp_path):
@@ -142,25 +141,29 @@ def test_add_test_with_empty_content(tmp_path, mock_add_test):
 
 
 def test_add_test_with_coverage_increase(tmp_path, mock_add_test):
-    test_path = tmp_path / 'test_coverage.py'
+    test_path = tmp_path / "test_coverage.py"
     test_path.touch()
 
     def test_new_coverage():
         assert True
+
     old_coverage_output = "0%"
     new_coverage_output = "100%"
     coverage_regexp = "(\\d+)%"
     mock_add_test.coverage_regexp = coverage_regexp
-    with patch.object(mock_add_test, 'run_test', side_effect=[(old_coverage_output, 0), (new_coverage_output, 0)]):
+    with patch.object(
+        mock_add_test,
+        "run_test",
+        side_effect=[(old_coverage_output, 0), (new_coverage_output, 0)],
+    ):
         mock_add_test.forward(test_path, test_new_coverage)
-    with open(test_path, 'rt') as f:
+    with open(test_path, "rt") as f:
         content = f.read()
-        assert 'def test_new_coverage():' in content
-
+        assert "def test_new_coverage():" in content
 
 
 def test_add_test_with_coverage_failing(tmp_path):
-    test_path = tmp_path / 'test.py'
+    test_path = tmp_path / "test.py"
     test_path.write_text(
         """
 def test_fail():
@@ -168,31 +171,40 @@ def test_fail():
         """
     )
 
-    tester = AddTest(coverage_regexp = "(.*)")
+    tester = AddTest(coverage_regexp="(.*)")
+
     def test_new():
         assert True
-    with pytest.raises(ValueError, match="Test file does not pass before adding the tests"):
+
+    with pytest.raises(
+        ValueError, match="Test file does not pass before adding the tests"
+    ):
         tester.forward(test_path, test_new)
 
+
 def test_add_test_with_no_coverage_increase(tmp_path, mock_add_test):
-    test_path = tmp_path / 'test_no_coverage.py'
+    test_path = tmp_path / "test_no_coverage.py"
     test_path.touch()
 
     def test_existing():
         assert True
 
-    def test_new_no_coverage():
-        pass
-    mock_add_test.coverage_regexp = '(\\d+)%'
-    with patch.object(mock_add_test, 'run_test', side_effect=[('0%', 0), ('100%', 0)]):
-        mock_add_test.forward(test_path, test_existing)
-    with patch.object(mock_add_test, 'run_test', side_effect=[('100%', 0), ('100%', 0)]):
-        try:
-            mock_add_test.forward(test_path, test_new_no_coverage)
-        except ValueError as e:
-            assert str(e) == 'Test did not increase coverage, full output:\n100%'
-        else:
-            assert False, 'No exception raised when adding a test that does not increase coverage'
+    mock_add_test.coverage_regexp = "(\\d+)"
+    with patch.object(
+        mock_add_test, "run_test", side_effect=[("100%", 0), ("100%", 0)]
+    ):
+        with pytest.raises(ValueError, match="Test did not increase coverage"):
+            mock_add_test.forward(test_path, test_existing)
 
 
+def test_add_failing_test_with_coverage(tmp_path, mock_add_test):
+    test_path = tmp_path / "test_no_coverage.py"
+    test_path.touch()
 
+    def test_existing():
+        assert True
+
+    mock_add_test.coverage_regexp = "(\\d+)"
+    with patch.object(mock_add_test, "run_test", side_effect=[("0%", 0), ("100%", 1)]):
+        with pytest.raises(ValueError, match="Test failed with output"):
+            mock_add_test.forward(test_path, test_existing)
